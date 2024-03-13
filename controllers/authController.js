@@ -1,5 +1,5 @@
 import validator from 'validator'
-import { registerFaculty } from '../modules/authModule.js';
+import { registerFaculty, validateFacultyLoginDetails } from '../modules/authModule.js';
 export const handleFacultyRegister = async (req, res) => {
     try {
 
@@ -36,6 +36,30 @@ export const handleFacultyRegister = async (req, res) => {
         const statusCode = result.success ? 201 : 400
         res.status(statusCode).json(result);
     } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            data: []
+        })
+    }
+}
+
+export const handleFacultyLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+         // Validate email
+        if (!validator.isEmail(email)) return res.status(400).json({
+            success: false,
+            message: "Email address is not valid"
+        })
+
+        const result = await validateFacultyLoginDetails(email, password);
+
+        const statusCode = result.success ? 201 : 400
+        res.status(statusCode).json(result);
+    } catch (error) {
+        console.error(error);
         res.status(500).json({
             success: false,
             message: error.message,
