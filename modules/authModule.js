@@ -153,3 +153,57 @@ export const registerStudent = async (fullName, email, password, courseId, branc
         }
     }
 }
+
+export const validateStudentLoginDetails = async (email, password) => {
+    try {
+        const query = {
+            text: `
+                SELECT student_password FROM StudentInfo WHERE student_email = $1
+            `, values: [email]
+        }
+
+        const { rows, rowCount } = await pool.query(query);
+
+        if (rowCount != 1) return {
+            success: false,
+            message: "Email is not registered",
+            data: []
+        }
+
+        const storedPassword = rows[0]?.student_password;
+        const checkPassword = await bcrypt.compare(password, storedPassword)
+
+        if (!checkPassword) return {
+            success: false,
+            message: "Invalid Password",
+            data: []
+        }
+
+        const fetchStudentDataQuery = {
+            text: `
+                SELECT 
+                    si.student_id, 
+                    si.student_full_name, 
+                    si.student_email
+                FROM StudentInfo si
+                WHERE student_email = $1
+            `,
+            values: [email]
+        }
+
+        const studentData = await pool.query(fetchStudentDataQuery)
+
+        return {
+            success: true,
+            message: "Login Successful",
+            data: studentData.rows
+        }
+    } catch (error) {
+        console.error(`Error in validateFacultyLoginDetails() call: ${error}`);
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
