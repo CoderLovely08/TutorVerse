@@ -1,15 +1,30 @@
 import express from "express";
-const app = express();
+import bodyParser from "body-parser";
+import multer from 'multer'
 import 'dotenv/config'
+
+
+// Creating app instance
+const app = express();
+
 const PORT = process.env.PORT;
 
 // Set view engine to use EJS
 app.set('view engine', 'ejs')
 
+// Setup middlewares
+app.use(express.json());
+// app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 // Import routers
 import apiRouter from './routes/apiRoutes.js'
+import authRouter from './routes/authRoutes.js'
 
-
+// Home route
 app.get('/', (req, res) => {
     try {
         res.render('index')
@@ -18,7 +33,11 @@ app.get('/', (req, res) => {
     }
 });
 
+// API routes
 app.use('/api', apiRouter);
+
+// Auth Routes
+app.use('/auth', authRouter)
 
 
 
