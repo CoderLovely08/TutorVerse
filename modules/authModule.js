@@ -34,7 +34,7 @@ export const registerFaculty = async (fullName, email, password, courseId, branc
         const { rows, rowCount } = await pool.query(query);
         return {
             success: rowCount == 1,
-            message: "Faculty Registered Succesfully",
+            message: "Faculty Registration Successful",
             data: rows
         }
     } catch (error) {
@@ -99,6 +99,53 @@ export const validateFacultyLoginDetails = async (email, password) => {
         }
     } catch (error) {
         console.error(`Error in validateFacultyLoginDetails() call: ${error}`);
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
+export const registerStudent = async (fullName, email, password, courseId, branchId, semesterId, phone, dob) => {
+    try {
+        const studentExistsQuery = {
+            text: `SELECT student_id FROM StudentInfo WHERE student_email = $1`,
+            values: [email]
+        }
+
+        const studentExists = await pool.query(studentExistsQuery)
+
+        if (studentExists.rowCount > 0) return {
+            success: false,
+            message: "Student with same email already exists",
+            data: []
+        }
+
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+        const query = {
+            text: `INSERT INTO StudentInfo(
+                student_full_name,
+                student_email,
+                student_password,
+                course_id,
+                branch_id,
+                semester_id,
+                student_phone_number,
+                student_dob
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+            values: [fullName, email, hashedPassword, courseId, branchId, semesterId, phone, dob]
+        }
+
+        const { rows, rowCount } = await pool.query(query);
+        return {
+            success: rowCount == 1,
+            message: "Student Registration Successful",
+            data: rows
+        }
+    } catch (error) {
+        console.error(`Error in registerStudent() call: ${error}`);
         return {
             success: false,
             message: error.message,
