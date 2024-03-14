@@ -39,6 +39,18 @@ export const handleFetchAllSemesters = async (req, res) => {
     }
 }
 
+// -----------------------------------------------------------
+//                  Student route handlers
+// -----------------------------------------------------------
+/**
+ * Handle fetching all students.
+ * 
+ * This function sends a GET request to fetch all students based on a specific course ID and branch ID.
+ * 
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either the fetched students or an error message.
+ */
 export const handleFetchAllStudents = async(req, res) => {
     try {
         // Todo implement this method here
@@ -55,6 +67,15 @@ export const handleFetchAllStudents = async(req, res) => {
     }
 }
 
+/**
+ * Handle fetching a student by their ID.
+ * 
+ * This function sends a GET request to fetch details of a student based on their ID.
+ * 
+ * @param {object} req - The request object containing the student ID.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either the fetched student details or an error message.
+ */
 export const handleFetchStudentById = async (req, res) => {
     try {
         const { studentId } = req.params;
@@ -69,6 +90,18 @@ export const handleFetchStudentById = async (req, res) => {
     }
 }
 
+// -----------------------------------------------------------
+//                  Skill route handlers
+// -----------------------------------------------------------
+/**
+ * Handle fetching all skills.
+ * 
+ * This function sends a GET request to fetch all skills available.
+ * 
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either the fetched skills or an error message.
+ */
 export const handleFetchAllSkills = async (req, res) => {
     try {
         // Todo implement this method here
@@ -83,6 +116,18 @@ export const handleFetchAllSkills = async (req, res) => {
     }
 }
 
+// -----------------------------------------------------------
+//                  Faculty route handlers
+// -----------------------------------------------------------
+/**
+ * Handle fetching all faculty members.
+ * 
+ * This function sends a GET request to fetch all faculty members available.
+ * 
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either the fetched faculty members or an error message.
+ */
 export const handleFetchAllFaculty = async (req, res) => {
     try {
         // Todo implement this method here
@@ -97,6 +142,18 @@ export const handleFetchAllFaculty = async (req, res) => {
     }
 }
 
+// -----------------------------------------------------------
+//                  Tutor route handlers
+// -----------------------------------------------------------
+/**
+ * Handle fetching all tutors.
+ * 
+ * This function sends a GET request to fetch all tutors available.
+ * 
+ * @param {object} req - The request object.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either the fetched tutors or an error message.
+ */
 export const handleFetchAllTutors = async (req, res) => {
     try {
         // Todo implement this method here
