@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleFetchAllBranches, handleFetchAllCourses, handleFetchAllFaculty, handleFetchAllSemesters, handleFetchAllSkills, handleFetchAllStudents, handleFetchAllTutors } from "../controllers/apiController.js";
+import { handleDeleteStudentById, handleDeleteTutorById, handleFetchAllBranches, handleFetchAllCourses, handleFetchAllFaculty, handleFetchAllSemesters, handleFetchAllSkills, handleFetchAllStudents, handleFetchAllTutors, handleFetchFacultyById, handleFetchSkillById, handleFetchStudentById, handleFetchTutorById, handleUpdateStudentById, handleUpdateTutorById } from "../controllers/apiController.js";
 
 const router = Router();
 
@@ -53,7 +53,7 @@ router.route('/skill').get(handleFetchAllSkills);
  * GET
  * Description: Endpoint to fetch a skill by id
  */
-router.route('/skill/:skillId').get(handleFetchAllSkills);
+router.route('/skill/:skillId').get(handleFetchSkillById);
 
 // --------------------------------------------
 //              FACULTY API Routes
