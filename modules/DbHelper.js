@@ -105,3 +105,66 @@ export const getAllStudents = async (courseId = 0, branchId = 0) => {
         }
     }
 }
+
+export const getAllSkills = async () => {
+    try {
+        const query = {
+            text: `SELECT * FROM SkillsInfo`,
+        }
+
+        const { rows } = await pool.query(query);
+        return {
+            success: true,
+            message: "Data fetched",
+            data: rows
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
+export const getAllFaculty = async () => {
+    try {
+        const query = {
+            text: `SELECT * FROM FacultyInfo`,
+        }
+
+        const { rows } = await pool.query(query);
+        return {
+            success: true,
+            message: "Data fetched",
+            data: rows
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
+export const getAllTutors = async () => {
+    try {
+        const query = {
+            text: `SELECT * FROM TutorInfo`,
+        }
+
+        const { rows } = await pool.query(query);
+        return {
+            success: true,
+            message: "Data fetched",
+            data: rows
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}

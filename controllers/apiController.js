@@ -1,4 +1,4 @@
-import { getAllBranches, getAllCourses, getAllSemesters, getAllStudents } from "../modules/DbHelper.js"
+import { getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors } from "../modules/DbHelper.js"
 
 export const handleFetchAllCourses = async (req, res) => {
     try {
@@ -29,7 +29,7 @@ export const handleFetchAllBranches = async (req, res) => {
 export const handleFetchAllSemesters = async (req, res) => {
     try {
         const result = await getAllSemesters();
-        res.status(200).json(result);
+        res.status(result.success ? 200 : 400).json(result);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -58,6 +58,8 @@ export const handleFetchAllStudents = async(req, res) => {
 export const handleFetchAllSkills = async (req, res) => {
     try {
         // Todo implement this method here
+        const result = await getAllSkills();
+        res.status(result.success ? 200 : 400).json(result);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -70,6 +72,8 @@ export const handleFetchAllSkills = async (req, res) => {
 export const handleFetchAllFaculty = async (req, res) => {
     try {
         // Todo implement this method here
+        const result = await getAllFaculty();
+        res.status(result.success ? 200 : 400).json(result);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -82,6 +86,8 @@ export const handleFetchAllFaculty = async (req, res) => {
 export const handleFetchAllTutors = async (req, res) => {
     try {
         // Todo implement this method here
+        const result = await getAllTutors();
+        res.status(result.success ? 200 : 400).json(result);
     } catch (error) {
         res.status(500).json({
             success: false,
