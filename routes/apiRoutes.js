@@ -26,7 +26,19 @@ router.route('/student').get(handleFetchAllStudents);
  * GET
  * Description: Endpoint to fetch a student by id
  */
-router.route('/student/:studentId').get(handleFetchAllStudents);
+router.route('/student/:studentId').get(handleFetchStudentById);
+
+/**
+ * PUT
+ * Description: Endpoint to update a student by id
+ */
+router.route('/student/:studentId').put(handleUpdateStudentById);
+
+/**
+ * DELETE
+ * Description: Endpoint to delete a student by id
+ */
+router.route('/student/:studentId').delete(handleDeleteStudentById);
 
 // --------------------------------------------
 //              SKILL API Routes
@@ -56,7 +68,7 @@ router.route('/faculty').get(handleFetchAllFaculty);
  * GET
  * Description: Endpoint to fetch a faculty by id
  */
-router.route('/faculty/:facultyId').get(handleFetchAllFaculty);
+router.route('/faculty/:facultyId').get(handleFetchFacultyById);
 
 // --------------------------------------------
 //              TUTOR API Routes
@@ -71,7 +83,19 @@ router.route('/tutor').get(handleFetchAllTutors);
  * GET
  * Description: Endpoint to fetch a tutor by id
  */
-router.route('/tutor/:tutorId').get(handleFetchAllTutors);
+router.route('/tutor/:tutorId').get(handleFetchTutorById);
+
+/**
+ * GET
+ * Description: Endpoint to update a tutor by id
+ */
+router.route('/tutor/:tutorId').put(handleUpdateTutorById);
+
+/**
+ * GET
+ * Description: Endpoint to delete a tutor by id
+ */
+router.route('/tutor/:tutorId').delete(handleDeleteTutorById);
 
 
 export default router
