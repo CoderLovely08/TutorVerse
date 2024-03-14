@@ -1,4 +1,4 @@
-import { getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors, getStudentDetailsById } from "../modules/DbHelper.js"
+import { deleteStudentById, getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors, getStudentDetailsById, updateStudentById } from "../modules/DbHelper.js"
 
 export const handleFetchAllCourses = async (req, res) => {
     try {
@@ -90,6 +90,44 @@ export const handleFetchStudentById = async (req, res) => {
     }
 }
 
+export const handleUpdateStudentById = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const { updateObject } = req.body;
+        const result = await updateStudentById(studentId, updateObject);
+        res.status(result.success ? 200 : 400).json(result)
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            data: []
+        })
+    }
+}
+
+/**
+ * Handle deleting a student by their ID.
+ * 
+ * This function sends a DELETE request to delete a student based on their ID.
+ * 
+ * @param {object} req - The request object containing the student ID.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either a success message or an error message.
+ */
+export const handleDeleteStudentById = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        const result = await deleteStudentById(studentId);
+        res.status(result.success ? 200 : 400).json(result)
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            data: []
+        })
+    }
+}
+
 // -----------------------------------------------------------
 //                  Skill route handlers
 // -----------------------------------------------------------
@@ -168,23 +206,16 @@ export const handleFetchAllTutors = async (req, res) => {
     }
 }
 
-export const handleUpdateStudentById = async () => {
-
-}
-
-export const handleDeleteStudentById = async () => {
-
-}
 
 export const handleFetchSkillById = async() => {
     
 }
 
-export const handleFetchFacultyById = async () => {
+export const handleFetchFacultyById = async (req, res) => {
 
 }
 
-export const handleFetchTutorById = async () => {
+export const handleFetchTutorById = async (req, res) => {
 
 }
 
@@ -192,6 +223,6 @@ export const handleUpdateTutorById = async() => {
     
 }
 
-export const handleDeleteTutorById = async () => {
+export const handleDeleteTutorById = async (req, res) => {
     
 }

@@ -135,6 +135,54 @@ export const getStudentDetailsById = async (studentId = 0) => {
     }
 }
 
+export const updateStudentById = async (studentId, updateObject) => {
+    try {
+        const fieldUpdates = updateObject.map(({ field, value }) => {
+            return `${field} = '${value}'`;
+        }).join(', ');
+
+         const query = {
+            text: `UPDATE StudentInfo SET ${fieldUpdates} WHERE student_id = $1`,
+            values: [studentId]
+        };
+
+        const { rowCount } = await pool.query(query);
+        return {
+            success: rowCount == 1,
+            message: rowCount == 1 ? "Student record updated" : "Student record not found",
+            data: []
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
+export const deleteStudentById = async (studentId) => {
+    try {
+        const query = {
+            text: `DELETE FROM StudentInfo WHERE student_id = $1`,
+            values: [studentId]
+        }
+
+        const { rowCount } = await pool.query(query);
+        return {
+            success: rowCount == 1,
+            message: rowCount == 1 ? "Student record deleted" : "Student record not found",
+            data: []
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
 export const getAllSkills = async () => {
     try {
         const query = {
