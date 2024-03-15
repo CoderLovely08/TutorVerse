@@ -1,4 +1,5 @@
-import { deleteStudentById, getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors, getStudentDetailsById, updateStudentById } from "../modules/DbHelper.js"
+import validator from "validator";
+import { deleteStudentById, getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors, getSkillBySkillId, getStudentDetailsById, updateStudentById } from "../modules/DbHelper.js"
 
 export const handleFetchAllCourses = async (req, res) => {
     try {
@@ -90,6 +91,16 @@ export const handleFetchStudentById = async (req, res) => {
     }
 }
 
+/**
+ * Handle updating a student by their ID.
+ * 
+ * This function sends a PUT request to update a student based on their ID.
+ * 
+ * @param {object} req - The request object containing the student ID and updateObject.
+ * @param {object} res - The response object.
+ * @returns {object} JSON response containing either a success message or an error message.
+ */
+
 export const handleUpdateStudentById = async (req, res) => {
     try {
         const { studentId } = req.params;
@@ -168,7 +179,6 @@ export const handleFetchAllSkills = async (req, res) => {
  */
 export const handleFetchAllFaculty = async (req, res) => {
     try {
-        // Todo implement this method here
         const result = await getAllFaculty();
         res.status(result.success ? 200 : 404).json(result);
     } catch (error) {
@@ -194,7 +204,6 @@ export const handleFetchAllFaculty = async (req, res) => {
  */
 export const handleFetchAllTutors = async (req, res) => {
     try {
-        // Todo implement this method here
         const result = await getAllTutors();
         res.status(result.success ? 200 : 404).json(result);
     } catch (error) {
@@ -207,8 +216,23 @@ export const handleFetchAllTutors = async (req, res) => {
 }
 
 
-export const handleFetchSkillById = async() => {
-    
+export const handleFetchSkillById = async(req, res) => {
+    try {
+        const { skillId } = req.params;
+
+        if (!validator.isNumeric(skillId)) return res.json({
+            success: false,
+            message: "skillId param is missing, and it should be an integer.\nEx: /api/skill/12"
+        })
+        const result = await getSkillBySkillId(skillId);
+        res.status(result.success ? 200 : 404).json(result);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            data: []
+        })
+    }
 }
 
 export const handleFetchFacultyById = async (req, res) => {

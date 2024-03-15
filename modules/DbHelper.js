@@ -183,6 +183,14 @@ export const deleteStudentById = async (studentId) => {
     }
 }
 
+
+// -----------------------------------------------------------
+//                  Skill Related Methods
+// -----------------------------------------------------------
+/**
+ * Fetches all skills from the database.
+ * @returns {Object} An object containing success status, message, and fetched data.
+ */
 export const getAllSkills = async () => {
     try {
         const query = {
@@ -203,6 +211,29 @@ export const getAllSkills = async () => {
         }
     }
 }
+
+export const getSkillBySkillId = async (id) => {
+    try {
+        const query = {
+            text: `SELECT * FROM SkillsInfo WHERE skill_id = $1`,
+            values: [id]
+        }
+
+        const { rows, rowCount } = await pool.query(query);
+        return {
+            success: rowCount == 1,
+            message: rowCount == 1 ? "Data fetched" : "Skill Id does not exists",
+            data: rows
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
 
 export const getAllFaculty = async () => {
     try {
