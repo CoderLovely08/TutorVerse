@@ -290,6 +290,32 @@ export const getFacultyById = async (id) => {
     }
 }
 
+export const markStudentVerifiedById = async (id) => {
+    try {
+        const query = {
+            text: `
+            UPDATE TutorInfo 
+                SET is_verified = true 
+            WHERE student_id = $1
+            `,
+            values: [id]
+        }
+
+        const { rows, rowCount } = await pool.query(query);
+        return {
+            success: rowCount == 1,
+            message: rowCount == 1 ? "Student Verified as a tutor" : "Student Id does not exists",
+            data: rows
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
 export const getAllTutors = async () => {
     try {
         const query = {
