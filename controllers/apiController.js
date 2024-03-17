@@ -1,5 +1,6 @@
 import validator from "validator";
 import {
+  applyForTutor,
   deleteStudentById,
   getAllBranches,
   getAllCourses,
@@ -274,8 +275,8 @@ export const handleFetchFacultyById = async (req, res) => {
 
 export const handleVerifyStudentById = async (req, res) => {
   try {
-      const { studentId } = req.params;
-      const { facultyId } = req.session || 1;
+    const { studentId } = req.body;
+    const { facultyId } = req.session || 1;
     const result = await markStudentVerifiedById(studentId, facultyId);
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {
@@ -291,6 +292,21 @@ export const handleFetchTutorById = async (req, res) => {
   try {
     const { tutorId } = req.params;
     const result = await getTutorDetailsById(tutorId);
+    res.status(result.success ? 200 : 404).json(result);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      data: [],
+    });
+  }
+};
+
+export const handleApplyTutor = async (req, res) => {
+  try {
+    const { studentId } = req.session ?? 1;
+    const { skillId, description } = req.body;
+    const result = await applyForTutor(studentId, skillId, description);
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {
     res.status(500).json({

@@ -324,7 +324,36 @@ export const markStudentVerifiedById = async (studentId, facultyId) => {
 export const getAllTutors = async () => {
   try {
     const query = {
-      text: `SELECT * FROM TutorInfo`,
+      text: `
+      SELECT 
+        ti.tutor_id,
+        si.student_id,
+        si.student_full_name,
+        ski.skill_name,
+        ti.skill_description,
+        ti.is_verified,
+        ti.tutor_rating,
+        si.student_email,
+        si.student_phone_number,
+        si.student_profile_src,
+        ci.course_name,
+        bi.branch_name,
+        semi.semester_name,
+        fi.faculty_full_name
+      FROM TutorInfo ti
+      JOIN StudentInfo si
+          ON si.student_id = ti.tutor_id
+      JOIN SkillsInfo ski
+          ON ski.skill_id = ti.skill_id
+      JOIN CourseInfo ci
+          ON ci.course_id = si.course_id
+      JOIN BranchInfo bi
+          ON bi.branch_id = si.branch_id
+      JOIN SemesterInfo semi
+          ON semi.semester_id = si.semester_id
+      JOIN FacultyInfo fi 
+          ON fi.faculty_id = ti.faculty_id
+      `,
     };
 
     const { rows } = await pool.query(query);
@@ -368,6 +397,54 @@ export const getTutorDetailsById = async (id) => {
     return {
       success: rowCount == 1,
       message: rowCount == 1 ? "Data fetched" : "Tutor details not found",
+      data: rows,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+      data: [],
+    };
+  }
+};
+
+export const applyForTutor = async (studentId = 1, skillId, description) => {
+  try {
+    console.log(studentId, skillId, description);
+    const tutorExistsQuery = {
+      text: `
+            SELECT tutor_id FROM TutorInfo
+            WHERE student_id = $1 AND skill_id = $2
+            `,
+      values: [studentId, skillId],
+    };
+
+    const tutorExists = await pool.query(tutorExistsQuery);
+
+    if (tutorExists.rowCount > 0)
+      return {
+        success: false,
+        message: "You are already a tutor for the selected skill",
+        data: [],
+      };
+    const query = {
+      text: `
+        INSERT INTO TutorInfo(
+            student_id, 
+            skill_id, 
+            skill_description
+        ) VALUES ($1, $2, $3)
+      `,
+      values: [studentId, skillId, description],
+    };
+
+    const { rowCount, rows } = await pool.query(query);
+    return {
+      success: rowCount == 1,
+      message:
+        rowCount == 1
+          ? "Application for tutor submitted succesfully"
+          : "Unable to process application.",
       data: rows,
     };
   } catch (error) {

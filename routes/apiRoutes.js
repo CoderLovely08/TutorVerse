@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleDeleteStudentById, handleDeleteTutorById, handleFetchAllBranches, handleFetchAllCourses, handleFetchAllFaculty, handleFetchAllSemesters, handleFetchAllSkills, handleFetchAllStudents, handleFetchAllTutors, handleFetchFacultyById, handleFetchSkillById, handleFetchStudentById, handleFetchTutorById, handleUpdateStudentById, handleUpdateTutorById, handleVerifyStudentById } from "../controllers/apiController.js";
+import { handleApplyTutor, handleDeleteStudentById, handleDeleteTutorById, handleFetchAllBranches, handleFetchAllCourses, handleFetchAllFaculty, handleFetchAllSemesters, handleFetchAllSkills, handleFetchAllStudents, handleFetchAllTutors, handleFetchFacultyById, handleFetchSkillById, handleFetchStudentById, handleFetchTutorById, handleUpdateStudentById, handleUpdateTutorById, handleVerifyStudentById } from "../controllers/apiController.js";
 
 const router = Router();
 
@@ -74,7 +74,7 @@ router.route('/faculty/:facultyId').get(handleFetchFacultyById);
  * POST
  * Description: Endpoint to verify a student as tutor
 */
-router.route('/faculty/verify/:studentId').get(handleVerifyStudentById);
+router.route('/faculty/verify').post(handleVerifyStudentById);
 
 
 // --------------------------------------------
@@ -96,7 +96,7 @@ router.route('/tutor/:tutorId').get(handleFetchTutorById);
  * POST
  * Description: Endpoint to apply for a tutor role
  */
-// router.route('/tutor').get(handleApplyTutor);
+router.route('/tutor').post(handleApplyTutor);
 
 /**
  * GET
