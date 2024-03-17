@@ -197,7 +197,12 @@ export const handleStudentLogin = async (req, res) => {
     //   Check if login was a success or not
     if (result.success) {
       // Generate a token
-      token = await genereateToken(result.data);
+      const userObject = {
+        userId: result.data[0].student_id,
+        username: result.data[0].student_full_name,
+        role: "student",
+      };
+      token = await genereateToken(userObject);
       // If token generation is successful add token to response object
       if (token.succes) {
         responseObject = {
