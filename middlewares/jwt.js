@@ -25,23 +25,36 @@ export const genereateToken = async (userObject) => {
   }
 };
 
-export const verifyToken = async (token) => {
+export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
+  // Get the token from the request headers or query parameters or cookies
+  const token =
+    req.headers.authorization || req.query.token || req.cookies.token;
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Token is missing" });
+  }
+
   try {
     // Verify the token
     const decoded = jwt.verify(token, TOKEN_SECRET);
 
-    // If verification is successful, return the decoded payload
-    return {
-      success: true,
-      payload: decoded,
-      message: "Token verified",
-    };
+    // Set req.user to the decoded payload
+      req.user = decoded;
+
+    if (!requiredRole.includes(req.user.role)) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Unauthorized access" });
+    }
+
+    // Call next to move to the next middleware or route handler
+    next();
   } catch (error) {
-    // If verification fails, handle the error
     console.error("Error verifying token:", error);
-    return {
-      success: false,
-      message: "Token verification failed",
-    };
+    return res
+      .status(401)
+      .json({ success: false, message: "Token verification failed" });
   }
 };

@@ -74,7 +74,34 @@ export const handleFacultyLogin = async (req, res) => {
     const result = await validateFacultyLoginDetails(email, password);
 
     const statusCode = result.success ? 200 : 401;
-    res.status(statusCode).json(result);
+
+    let responseObject = {
+      success: result.success,
+      message: result.message,
+    };
+
+    let token;
+    //   Check if login was a success or not
+    if (result.success) {
+      // Generate a token
+      const userObject = {
+        userId: result.data[0].faculty_id,
+        username: result.data[0].faculty_full_name,
+        role: "faculty",
+      };
+      token = await genereateToken(userObject);
+      // If token generation is successful add token to response object
+      if (token.succes) {
+        responseObject = {
+          ...responseObject,
+          token: token.token,
+        };
+        res.cookie("token", token?.token, { maxAge: 900000, httpOnly: true });
+        return res.status(statusCode).json(responseObject);
+      }
+    }
+    //   If unauthorized send appropriate response
+    return res.status(statusCode).json(responseObject);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -209,7 +236,7 @@ export const handleStudentLogin = async (req, res) => {
           ...responseObject,
           token: token.token,
         };
-        res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+        res.cookie("token", token?.token, { maxAge: 900000, httpOnly: true });
         return res.status(statusCode).json(responseObject);
       }
     }
