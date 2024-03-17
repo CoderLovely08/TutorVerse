@@ -248,7 +248,12 @@ export const handleFetchAllFaculty = async (req, res) => {
  */
 export const handleFetchAllTutors = async (req, res) => {
   try {
-    const result = await getAllTutors();
+    const { status } = req.query;
+    if (!status || !validator.isBoolean(status)) return res.json({
+      success: false,
+      message: "Param 'status' of type boolean is missing"
+    });
+    const result = await getAllTutors(status);
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {
     res.status(500).json({
@@ -275,9 +280,13 @@ export const handleFetchFacultyById = async (req, res) => {
 
 export const handleVerifyStudentById = async (req, res) => {
   try {
-    const { studentId } = req.body;
+    const { studentId, isVerified } = req.body;
     const { facultyId } = req.session || 1;
-    const result = await markStudentVerifiedById(studentId, facultyId);
+    const result = await markStudentVerifiedById(
+      studentId,
+      facultyId,
+      isVerified
+    );
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {
     res.status(500).json({

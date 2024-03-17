@@ -292,15 +292,19 @@ export const getFacultyById = async (id) => {
   }
 };
 
-export const markStudentVerifiedById = async (studentId, facultyId) => {
+export const markStudentVerifiedById = async (
+  studentId,
+  facultyId,
+  isVerified
+) => {
   try {
     const query = {
       text: `
             UPDATE TutorInfo 
-                SET is_verified = true, faculty_id = $1 
+                SET is_verified = $3, faculty_id = $1 
             WHERE student_id = $2
             `,
-      values: [studentId, facultyId],
+      values: [studentId, facultyId, isVerified],
     };
 
     const { rows, rowCount } = await pool.query(query);
@@ -321,7 +325,7 @@ export const markStudentVerifiedById = async (studentId, facultyId) => {
   }
 };
 
-export const getAllTutors = async () => {
+export const getAllTutors = async (status) => {
   try {
     const query = {
       text: `
@@ -353,7 +357,9 @@ export const getAllTutors = async () => {
           ON semi.semester_id = si.semester_id
       JOIN FacultyInfo fi 
           ON fi.faculty_id = ti.faculty_id
+      WHERE ti.is_verified = $1
       `,
+      values: [status],
     };
 
     const { rows } = await pool.query(query);
