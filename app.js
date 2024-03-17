@@ -1,9 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
-import multer from 'multer'
-import cookieParser from 'cookie-parser'
-import 'dotenv/config'
-
+import multer from "multer";
+import cookieParser from "cookie-parser";
+import "dotenv/config";
 
 // Creating app instance
 const app = express();
@@ -11,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 // Set view engine to use EJS
-app.set('view engine', 'ejs')
+app.set("view engine", "ejs");
 
 // Setup middlewares
 app.use(express.json());
@@ -24,25 +23,28 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Import routers
-import apiRouter from './routes/apiRoutes.js'
-import authRouter from './routes/authRoutes.js'
+import apiRouter from "./routes/apiRoutes.js";
+import authRouter from "./routes/authRoutes.js";
 
 // Home route
-app.get('/', (req, res) => {
-    try {
-        res.render('index')
-    } catch (error) {
-        console.error(error);
-    }
+app.get("/", (req, res) => {
+  try {
+    res.render("index");
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 // API routes
-app.use('/api', apiRouter);
+app.use("/api", apiRouter);
 
 // Auth Routes
-app.use('/auth', authRouter)
+app.use("/auth", authRouter);
 
-
+// Middleware to handle 404 errors
+app.use((req, res, next) => {
+  res.render("404");
+});
 
 app.listen(PORT || 3000, (err) => {
   if (err) console.error(`Error running server: ${err}`);
