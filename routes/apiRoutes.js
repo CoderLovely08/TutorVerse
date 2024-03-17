@@ -93,6 +93,12 @@ router.route('/tutor').get(handleFetchAllTutors);
 router.route('/tutor/:tutorId').get(handleFetchTutorById);
 
 /**
+ * POST
+ * Description: Endpoint to apply for a tutor role
+ */
+// router.route('/tutor').get(handleApplyTutor);
+
+/**
  * GET
  * Description: Endpoint to update a tutor by id
  */
