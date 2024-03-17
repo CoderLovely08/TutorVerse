@@ -1,5 +1,5 @@
 import validator from "validator";
-import { deleteStudentById, getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors, getSkillBySkillId, getStudentDetailsById, updateStudentById } from "../modules/DbHelper.js"
+import { deleteStudentById, getAllBranches, getAllCourses, getAllFaculty, getAllSemesters, getAllSkills, getAllStudents, getAllTutors, getFacultyById, getSkillBySkillId, getStudentDetailsById, updateStudentById } from "../modules/DbHelper.js"
 
 export const handleFetchAllCourses = async (req, res) => {
     try {
@@ -243,11 +243,21 @@ export const handleFetchAllTutors = async (req, res) => {
 
 
 export const handleFetchFacultyById = async (req, res) => {
-
+    try {
+        const { facultyId } = req.params;
+        const result = await getFacultyById(facultyId);
+        res.status(result.success ? 200 : 404).json(result);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            data: []
+        })
+    }
 }
 
 export const handleVerifyStudentById = async (req, res) => {
-    
+
 }
 
 export const handleFetchTutorById = async (req, res) => {

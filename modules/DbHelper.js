@@ -238,13 +238,47 @@ export const getSkillBySkillId = async (id) => {
 export const getAllFaculty = async () => {
     try {
         const query = {
-            text: `SELECT * FROM FacultyInfo`,
+            text: `
+            SELECT * FROM FacultyInfo fi
+            JOIN CourseInfo ci
+                ON ci.course_id = fi.course_id
+            JOIN BranchInfo bi
+                ON bi.branch_id = fi.branch_id
+            `,
         }
 
         const { rows } = await pool.query(query);
         return {
             success: true,
             message: "Data fetched",
+            data: rows
+        }
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+            data: []
+        }
+    }
+}
+
+export const getFacultyById = async (id) => {
+    try {
+        const query = {
+            text: `
+            SELECT * FROM FacultyInfo fi
+            JOIN CourseInfo ci
+                ON ci.course_id = fi.course_id
+            JOIN BranchInfo bi
+                ON bi.branch_id = fi.branch_id
+            WHERE fi.faculty_id = $1
+            `,
+            values: [id]
+        }
+        const { rows, rowCount } = await pool.query(query);
+        return {
+            success: rowCount == 1,
+            message: rowCount == 1 ? "Data fetched" : "Faculty Id does not exists",
             data: rows
         }
     } catch (error) {
