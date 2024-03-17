@@ -1,156 +1,221 @@
-import validator from 'validator'
-import { registerFaculty, registerStudent, validateFacultyLoginDetails, validateStudentLoginDetails } from '../modules/authModule.js';
+import validator from "validator";
+import { genereateToken } from "../middlewares/jwt.js";
+import {
+  registerFaculty,
+  registerStudent,
+  validateFacultyLoginDetails,
+  validateStudentLoginDetails,
+} from "../modules/authModule.js";
 export const handleFacultyRegister = async (req, res) => {
-    try {
+  try {
+    const { fullName, email, password, courseId, branchId } = req.body;
 
-        const { fullName, email, password, courseId, branchId } = req.body;
+    // Validate name
+    if (!validator.isAlpha(fullName.replace(/\s/g, "")))
+      return res.status(400).json({
+        success: false,
+        message: "Name can only contain letters",
+      });
+    // Validate email
+    if (!validator.isEmail(email))
+      return res.status(400).json({
+        success: false,
+        message: "Email address is not valid",
+      });
+    // Validate password
+    if (!validator.isStrongPassword(password))
+      return res.status(400).json({
+        success: false,
+        message: "Please use a strong alphanumeric password",
+      });
+    // Vaidate course and branch ids
+    if (!validator.isInt(courseId))
+      return res.status(400).json({
+        success: false,
+        message: "Course Id missing",
+      });
 
-        // Validate name
-        if(!validator.isAlpha(fullName.replace(/\s/g, ''))) return res.status(400).json({
-            success: false,
-            message: "Name can only contain letters"
-        })
-        // Validate email
-        if (!validator.isEmail(email)) return res.status(400).json({
-            success: false,
-            message: "Email address is not valid"
-        })
-        // Validate password
-        if(!validator.isStrongPassword(password)) return res.status(400).json({
-            success: false,
-            message: "Please use a strong alphanumeric password"
-        })
-        // Vaidate course and branch ids
-        if(!validator.isInt(courseId)) return res.status(400).json({
-            success: false,
-            message: "Course Id missing"
-        })
-        
-        if (!validator.isInt(branchId)) return res.status(400).json({
-            success: false,
-            message: "Branch Id missing"
-        })
+    if (!validator.isInt(branchId))
+      return res.status(400).json({
+        success: false,
+        message: "Branch Id missing",
+      });
 
-        const result = await registerFaculty(fullName, email, password, courseId, branchId)
+    const result = await registerFaculty(
+      fullName,
+      email,
+      password,
+      courseId,
+      branchId
+    );
 
-        const statusCode = result.success ? 201 : 400
-        res.status(statusCode).json(result);
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+    const statusCode = result.success ? 201 : 400;
+    res.status(statusCode).json(result);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};
 
 export const handleFacultyLogin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-         // Validate email
-        if (!validator.isEmail(email)) return res.status(400).json({
-            success: false,
-            message: "Email address is not valid"
-        })
+    // Validate email
+    if (!validator.isEmail(email))
+      return res.status(400).json({
+        success: false,
+        message: "Email address is not valid",
+      });
 
-        const result = await validateFacultyLoginDetails(email, password);
+    const result = await validateFacultyLoginDetails(email, password);
 
-        const statusCode = result.success ? 201 : 400
-        res.status(statusCode).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+    const statusCode = result.success ? 200 : 401;
+    res.status(statusCode).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};
 
 export const handleStudentRegistration = async (req, res) => {
-    try {
-        const { fullName, email, password, courseId, branchId, semesterId, phone, dob } = req.body;
+  try {
+    const {
+      fullName,
+      email,
+      password,
+      courseId,
+      branchId,
+      semesterId,
+      phone,
+      dob,
+    } = req.body;
 
-        // Validate name
-        if(!validator.isAlpha(fullName.replace(/\s/g, ''))) return res.status(400).json({
-            success: false,
-            message: "Name can only contain letters between [A-Za-z]"
-        })
-        // Validate email
-        if (!validator.isEmail(email)) return res.status(400).json({
-            success: false,
-            message: "Email address is not valid"
-        })
-        // Validate password
-        if(!validator.isStrongPassword(password)) return res.status(400).json({
-            success: false,
-            message: "Please use a strong alphanumeric password"
-        })
-        // Validate course id
-        if(!validator.isInt(courseId)) return res.status(400).json({
-            success: false,
-            message: "Course Id missing"
-        })
-        
-        // Validate branch id
-        if (!validator.isInt(branchId)) return res.status(400).json({
-            success: false,
-            message: "Branch Id missing"
-        })
-        
-        // Validate semester id
-        if (!validator.isInt(semesterId)) return res.status(400).json({
-            success: false,
-            message: "Semester Id missing"
-        })
-        
-        // Validate phone number
-        if(!validator.isMobilePhone(phone, 'en-IN')) return res.status(400).json({
-            success: false,
-            message: "Enter a valid 10 digit phone number"
-        })
+    // Validate name
+    if (!validator.isAlpha(fullName.replace(/\s/g, "")))
+      return res.status(400).json({
+        success: false,
+        message: "Name can only contain letters between [A-Za-z]",
+      });
+    // Validate email
+    if (!validator.isEmail(email))
+      return res.status(400).json({
+        success: false,
+        message: "Email address is not valid",
+      });
+    // Validate password
+    if (!validator.isStrongPassword(password))
+      return res.status(400).json({
+        success: false,
+        message: "Please use a strong alphanumeric password",
+      });
+    // Validate course id
+    if (!validator.isInt(courseId))
+      return res.status(400).json({
+        success: false,
+        message: "Course Id missing",
+      });
 
-        // Validate DOB
-        if(!validator.isDate(dob)) return res.status(400).json({
-            success: false,
-            message: "Invalid DOB parsed"
-        })
+    // Validate branch id
+    if (!validator.isInt(branchId))
+      return res.status(400).json({
+        success: false,
+        message: "Branch Id missing",
+      });
 
-        const result = await registerStudent(fullName, email, password, courseId, branchId, semesterId, phone, dob);
+    // Validate semester id
+    if (!validator.isInt(semesterId))
+      return res.status(400).json({
+        success: false,
+        message: "Semester Id missing",
+      });
 
-        const statusCode = result.success ? 201 : 400
-        res.status(statusCode).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+    // Validate phone number
+    if (!validator.isMobilePhone(phone, "en-IN"))
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid 10 digit phone number",
+      });
+
+    // Validate DOB
+    if (!validator.isDate(dob))
+      return res.status(400).json({
+        success: false,
+        message: "Invalid DOB parsed",
+      });
+
+    const result = await registerStudent(
+      fullName,
+      email,
+      password,
+      courseId,
+      branchId,
+      semesterId,
+      phone,
+      dob
+    );
+
+    const statusCode = result.success ? 201 : 400;
+    res.status(statusCode).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};
 
 export const handleStudentLogin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-         // Validate email
-        if (!validator.isEmail(email)) return res.status(400).json({
-            success: false,
-            message: "Email address is not valid"
-        })
+    // Validate email
+    if (!validator.isEmail(email))
+      return res.status(400).json({
+        success: false,
+        message: "Email address is not valid",
+      });
 
-        const result = await validateStudentLoginDetails(email, password);
+    const result = await validateStudentLoginDetails(email, password);
+    const statusCode = result.success ? 200 : 401;
 
-        const statusCode = result.success ? 201 : 400
-        res.status(statusCode).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: error.message,
-            data: []
-        })
+    let responseObject = {
+      success: result.success,
+      message: result.message,
+    };
+
+    let token;
+    //   Check if login was a success or not
+    if (result.success) {
+      // Generate a token
+      token = await genereateToken(result.data);
+      // If token generation is successful add token to response object
+      if (token.succes) {
+        responseObject = {
+          ...responseObject,
+          token: token.token,
+        };
+        res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+        return res.status(statusCode).json(responseObject);
+      }
     }
-}
+    //   If unauthorized send appropriate response
+    return res.status(statusCode).json(responseObject);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};
