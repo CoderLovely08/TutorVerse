@@ -165,6 +165,32 @@ export const handleFetchAllSkills = async (req, res) => {
     }
 }
 
+/**
+ * Handles the fetch request to get a skill by its ID.
+ * 
+ * This function sends a GET request to fetch a skill by its skill id
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+export const handleFetchSkillById = async(req, res) => {
+    try {
+        const { skillId } = req.params;
+
+        if (!validator.isNumeric(skillId)) return res.json({
+            success: false,
+            message: "skillId param is missing, and it should be an integer.\nEx: /api/skill/12"
+        })
+        const result = await getSkillBySkillId(skillId);
+        res.status(result.success ? 200 : 404).json(result);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            data: []
+        })
+    }
+}
+
 // -----------------------------------------------------------
 //                  Faculty route handlers
 // -----------------------------------------------------------
@@ -216,27 +242,12 @@ export const handleFetchAllTutors = async (req, res) => {
 }
 
 
-export const handleFetchSkillById = async(req, res) => {
-    try {
-        const { skillId } = req.params;
-
-        if (!validator.isNumeric(skillId)) return res.json({
-            success: false,
-            message: "skillId param is missing, and it should be an integer.\nEx: /api/skill/12"
-        })
-        const result = await getSkillBySkillId(skillId);
-        res.status(result.success ? 200 : 404).json(result);
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message,
-            data: []
-        })
-    }
-}
-
 export const handleFetchFacultyById = async (req, res) => {
 
+}
+
+export const handleVerifyStudentById = async (req, res) => {
+    
 }
 
 export const handleFetchTutorById = async (req, res) => {

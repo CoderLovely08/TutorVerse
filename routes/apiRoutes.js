@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleDeleteStudentById, handleDeleteTutorById, handleFetchAllBranches, handleFetchAllCourses, handleFetchAllFaculty, handleFetchAllSemesters, handleFetchAllSkills, handleFetchAllStudents, handleFetchAllTutors, handleFetchFacultyById, handleFetchSkillById, handleFetchStudentById, handleFetchTutorById, handleUpdateStudentById, handleUpdateTutorById } from "../controllers/apiController.js";
+import { handleDeleteStudentById, handleDeleteTutorById, handleFetchAllBranches, handleFetchAllCourses, handleFetchAllFaculty, handleFetchAllSemesters, handleFetchAllSkills, handleFetchAllStudents, handleFetchAllTutors, handleFetchFacultyById, handleFetchSkillById, handleFetchStudentById, handleFetchTutorById, handleUpdateStudentById, handleUpdateTutorById, handleVerifyStudentById } from "../controllers/apiController.js";
 
 const router = Router();
 
@@ -69,6 +69,13 @@ router.route('/faculty').get(handleFetchAllFaculty);
  * Description: Endpoint to fetch a faculty by id
  */
 router.route('/faculty/:facultyId').get(handleFetchFacultyById);
+
+/**
+ * POST
+ * Description: Endpoint to verify a student as tutor
+*/
+router.route('/faculty/verify/:studentId').get(handleVerifyStudentById);
+
 
 // --------------------------------------------
 //              TUTOR API Routes

@@ -194,7 +194,7 @@ export const deleteStudentById = async (studentId) => {
 export const getAllSkills = async () => {
     try {
         const query = {
-            text: `SELECT * FROM SkillsInfo`,
+            text: `SELECT * FROM SkillsInfo ORDER BY skill_name`,
         }
 
         const { rows } = await pool.query(query);
