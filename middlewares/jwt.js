@@ -33,7 +33,7 @@ export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .json({ success: false, message: "Token is missing" });
+      .render('index');
   }
 
   try {
@@ -41,12 +41,10 @@ export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
     const decoded = jwt.verify(token, TOKEN_SECRET);
 
     // Set req.user to the decoded payload
-      req.user = decoded;
+    req.user = decoded;
 
     if (!requiredRole.includes(req.user.role)) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Unauthorized access" });
+      return res.status(403).render("403");
     }
 
     // Call next to move to the next middleware or route handler
