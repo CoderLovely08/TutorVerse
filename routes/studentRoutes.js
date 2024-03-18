@@ -6,7 +6,7 @@ const router = Router();
 
 router
   .route("/home")
-  .get(verifyTokenMiddleware(["student"], handleViewStudentHome));
+    .get(verifyTokenMiddleware(["student"]), handleViewStudentHome);
 
 router.route("/register").get(handleViewStudentRegister);
 
