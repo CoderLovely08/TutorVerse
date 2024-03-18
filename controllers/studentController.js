@@ -8,6 +8,7 @@ export const handleViewStudentHome = async (req, res) => {
   try {
     res.render("student/home");
   } catch (error) {
+      console.log(error);
     res.render("404");
   }
 };

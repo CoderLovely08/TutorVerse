@@ -33,7 +33,7 @@ export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .render('index');
+      .render('403');
   }
 
   try {

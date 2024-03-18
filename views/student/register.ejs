@@ -3,7 +3,7 @@
 <main class="flex justify-center items-center w-full h-fit">
   <div class="w-1/2 max-md:w-full m-4 bg-white p-8 rounded-lg shadow-md">
     <h2 class="text-2xl font-bold text-center mb-6">Student Registration</h2>
-    <form action="/student/register" method="POST">
+    <form id="register-form" method="POST">
       <div class="flex max-md:flex-col justify-between items-center gap-2">
         <div class="mb-4 w-full">
           <label for="fullName" class="block text-gray-700 font-semibold mb-2"
@@ -110,13 +110,13 @@
             class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-black"
             required
           >
-            <option value="" disabled selected hidden>Select your branch</option>
+            <option value="" disabled selected hidden>
+              Select your branch
+            </option>
             <!-- Add options for branches -->
-            <% for( let i=0; i < dropdownOptions.branchData.data.length; i++ )
-            { %>
-            <option
-              value="<%= dropdownOptions.branchData.data[i].branch_id %>"
-            >
+            <% for( let i=0; i < dropdownOptions.branchData.data.length; i++ ) {
+            %>
+            <option value="<%= dropdownOptions.branchData.data[i].branch_id %>">
               <%= dropdownOptions.branchData.data[i].branch_name %>
             </option>
             <% } %>
@@ -148,6 +148,7 @@
         </div>
       </div>
       <button
+        id="register-btn"
         type="submit"
         class="bg-black text-white font-semibold py-2 px-4 rounded-md w-full hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
       >
@@ -164,5 +165,71 @@
     </p>
   </div>
 </main>
+
+<script>
+  $(document).ready(function () {
+    $("#register-form").on("submit", function (event) {
+      event.preventDefault();
+
+      const fullName = $("#fullName").val().trim();
+      const phone = $("#contactNumber").val().trim();
+      const email = $("#email").val().trim();
+      const password = $("#password").val().trim();
+      const dob = $("#dob").val().trim();
+      const courseId = $("#course").val();
+      const branchId = $("#branch").val();
+      const semesterId = $("#semester").val();
+
+      let confirmOption = confirm("Are you sure to register?");
+      if (!confirmOption) return;
+
+      $.ajax({
+        type: "POST",
+        url: "/auth/student/register",
+        data: {
+          fullName,
+          phone,
+          email,
+          password,
+          dob,
+          courseId,
+          branchId,
+          semesterId,
+        },
+        beforeSend: function () {
+          $("#register-btn").text("Loading...");
+          $("#register-btn").removeClass("bg-black");
+          $("#register-btn").addClass("bg-gray-600");
+          $("#register-btn").prop("disabled", true);
+        },
+        success: function (resposne) {
+          if (resposne.success) {
+            alert(resposne.message);
+            window.location.href = "/student/login";
+          } else {
+            alert(resposne.message);
+          }
+        },
+        complete: function (status) {
+          $("#register-btn").text("Register");
+          $("#register-btn").removeClass("bg-gray-600");
+          $("#register-btn").addClass("bg-black");
+          $("#register-btn").prop("disabled", false);
+        },
+        error: function (xhr, status, error) {
+          // If there's an error with the request, handle the error response
+          if (xhr.status === 400 || xhr.status === 401) {
+            // Parse the error response JSON to get the message
+            var errorMessage = JSON.parse(xhr.responseText).message;
+            alert(errorMessage);
+          } else {
+            // For other errors, log the error to the console
+            console.log(error);
+          }
+        },
+      });
+    });
+  });
+</script>
 
 <%- include('../partials/footer') %>
