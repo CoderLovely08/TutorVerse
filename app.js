@@ -25,6 +25,7 @@ const upload = multer({ storage: storage });
 // Import routers
 import apiRouter from "./routes/apiRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import studentRouter from "./routes/studentRoutes.js";
 
 // Home route
 app.get("/", (req, res) => {
@@ -40,6 +41,9 @@ app.use("/api", apiRouter);
 
 // Auth Routes
 app.use("/auth", authRouter);
+
+// Student Routes
+app.use("/student", studentRouter);
 
 // Middleware to handle 404 errors
 app.use((req, res, next) => {

@@ -23,19 +23,13 @@ import { verifyTokenMiddleware } from "../middlewares/jwt.js";
 const router = Router();
 
 // Endpoint to fetch all courses
-router
-  .route("/course")
-  .get(verifyTokenMiddleware(["faculty", "student"]), handleFetchAllCourses);
+router.route("/course").get(handleFetchAllCourses);
 
 // Endpoint to fetch all branches
-router
-  .route("/branch")
-  .get(verifyTokenMiddleware(["faculty", "student"]), handleFetchAllBranches);
+router.route("/branch").get(handleFetchAllBranches);
 
 // Endpoint to fetch all semesters
-router
-  .route("/semester")
-  .get(verifyTokenMiddleware(["faculty", "student"]), handleFetchAllSemesters);
+router.route("/semester").get(handleFetchAllSemesters);
 
 // --------------------------------------------
 //              STUDENT API Routes
