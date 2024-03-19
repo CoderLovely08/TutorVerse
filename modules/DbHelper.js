@@ -108,7 +108,19 @@ export const getStudentDetailsById = async (studentId = 0) => {
   try {
     const query = {
       text: `
-            SELECT * FROM StudentInfo si 
+            SELECT 
+              si.student_id,
+              si.student_full_name,
+              si.student_email,
+              si.student_phone_number,
+              si.student_dob,
+              si.student_profile_src,
+              si.student_gender,
+              si.student_university_id,
+              ci.course_name,
+              bi.branch_name,
+              semi.semester_name
+            FROM StudentInfo si 
             JOIN CourseInfo ci
                 ON ci.course_id = si.course_id
             JOIN BranchInfo bi 

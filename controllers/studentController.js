@@ -2,11 +2,16 @@ import {
   getAllBranches,
   getAllCourses,
   getAllSemesters,
+  getStudentDetailsById,
 } from "../modules/DbHelper.js";
 
 export const handleViewStudentHome = async (req, res) => {
   try {
-    res.render("student/home");
+    const result = await getStudentDetailsById(req.user.userId);
+    if (result.success) res.render("student/home", {
+      studentData: result.data[0]
+    });
+    else throw Error("Error fetching student profile data");
   } catch (error) {
     console.log(error);
     res.render("404");

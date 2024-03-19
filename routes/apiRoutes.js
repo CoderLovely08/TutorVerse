@@ -48,7 +48,7 @@ router
  */
 router
   .route("/student/:studentId")
-  .get(verifyTokenMiddleware(["faculty"]), handleFetchStudentById);
+  .get(verifyTokenMiddleware(["faculty", "student"]), handleFetchStudentById);
 
 /**
  * PUT

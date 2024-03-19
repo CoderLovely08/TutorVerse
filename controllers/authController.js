@@ -118,11 +118,13 @@ export const handleStudentRegistration = async (req, res) => {
       fullName,
       email,
       password,
+      gender,
       courseId,
       branchId,
       semesterId,
       phone,
       dob,
+      enrollment
     } = req.body;
 
     // Validate name
@@ -164,6 +166,12 @@ export const handleStudentRegistration = async (req, res) => {
         message: "Semester Id missing",
       });
 
+    if (!validator.isNumeric(enrollment))
+      return res.status(400).json({
+        success: false,
+        message: "Invalid PRN/enrollment, only digits are allowed",
+      });
+
     // Validate phone number
     if (!validator.isMobilePhone(phone, "en-IN"))
       return res.status(400).json({
@@ -182,11 +190,13 @@ export const handleStudentRegistration = async (req, res) => {
       fullName,
       email,
       password,
+      gender,
       courseId,
       branchId,
       semesterId,
       phone,
-      dob
+      dob,
+      enrollment
     );
 
     const statusCode = result.success ? 201 : 400;
@@ -236,7 +246,7 @@ export const handleStudentLogin = async (req, res) => {
           ...responseObject,
           token: token.token,
         };
-        res.cookie("token", token?.token, { maxAge: 900000, httpOnly: true });
+        res.cookie("token", token?.token, { maxAge: 1200000, httpOnly: true });
         return res.status(statusCode).json(responseObject);
       }
     }

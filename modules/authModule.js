@@ -107,7 +107,7 @@ export const validateFacultyLoginDetails = async (email, password) => {
     }
 }
 
-export const registerStudent = async (fullName, email, password, courseId, branchId, semesterId, phone, dob) => {
+export const registerStudent = async (fullName, email, password, gender, courseId, branchId, semesterId, phone, dob, enrollment) => {
     try {
         const studentExistsQuery = {
             text: `SELECT student_id FROM StudentInfo WHERE student_email = $1`,
@@ -129,12 +129,14 @@ export const registerStudent = async (fullName, email, password, courseId, branc
                 student_full_name,
                 student_email,
                 student_password,
+                student_gender,
                 course_id,
                 branch_id,
                 semester_id,
                 student_phone_number,
-                student_dob
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+                student_dob,
+                student_university_id
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
             values: [fullName, email, hashedPassword, courseId, branchId, semesterId, phone, dob]
         }
 
