@@ -1,7 +1,39 @@
 <%- include('partials/header') %>
 
-<main class="flex justify-center items-center w-full h-screen">
-  
+<main class="w-full h-screen">
+  <section
+    id="home"
+    class="w-full flex xl:flex-row flex-col max-container p-2 relative"
+  >
+    <div class="w-full relative">
+      <img
+        src="images/banner.jpg"
+        class="w-full max-h-screen object-fit opacity-80 brightness-50 shadow-md rounded-lg"
+        alt="Background"
+      />
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white w-full"
+      >
+        <p
+          class="text-4xl max-md:text-3xl max-sm:text-lg max-md:leading-8 font-bold mb-4 underline"
+        >
+          We Build Strong <br />
+          Student Communities
+        </p>
+        <div class="flex justify-center text-white mt-6">
+          <p
+            class="w-1/2 max-md:w-full text-lg max-sm:text-sm text-center font-montserrat font-semibold max-xsm:leading-none max-xsm:font-normal"
+          >
+            Join our educational community where collaboration thrives and students empower each other to excel. Together, we ensure every individual gains the knowledge and skills essential for
+            a prosperous future.
+          </p>
+        </div>
+        <a href="/student/register">
+          <button class="px-4 py-2 rounded-md shadow-md border border-black text-xl text-black transition-all bg-white text-black hover:text-white hover:bg-black cursor-pointer font-bold text-base tracking-wide">Get Started</button>
+        </a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <%- include('partials/footer') %>
