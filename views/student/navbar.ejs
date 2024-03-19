@@ -40,11 +40,12 @@
           <div
             class="h-12 w-12 bg-gray-300 rounded-full flex items-center justify-center mr-4 shadow-md"
           >
-            <img class="h-12 w-12" src="../images/avatar/panda.png" alt="">
+            <img class="h-12 w-12" src="../images/avatar/panda.png" alt="" />
           </div>
 
           <!-- Logout Button -->
           <button
+            id="logout-btn"
             class="bg-white text-black hover:bg-black hover:text-white py-2 px-4 rounded-md shadow-md focus:outline-none border border-black"
           >
             Logout
@@ -52,3 +53,27 @@
         </div>
       </nav>
     </header>
+
+    <script>
+      $(document).ready(function () {
+        $("#logout-btn").on("click", function () {
+  
+            let confirmOption = confirm("Are you sure to logout?");
+          if (!confirmOption) return;
+  
+          $.ajax({
+            type: "POST",
+            url: "/auth/logout",
+            success: function (response) {
+              if (response.success) alert(response.message);
+              window.location.href = "/";
+            },
+            error: function (error) {
+              alert(error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

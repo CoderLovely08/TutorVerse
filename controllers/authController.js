@@ -124,7 +124,7 @@ export const handleStudentRegistration = async (req, res) => {
       semesterId,
       phone,
       dob,
-      enrollment
+      enrollment,
     } = req.body;
 
     // Validate name
@@ -254,6 +254,22 @@ export const handleStudentLogin = async (req, res) => {
     return res.status(statusCode).json(responseObject);
   } catch (error) {
     console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};
+
+export const handleUserLogout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.json({
+      success: true,
+      message: "Logout successful",
+    });
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
