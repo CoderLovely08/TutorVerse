@@ -31,9 +31,7 @@ export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
     req.headers.authorization || req.query.token || req.cookies.token;
 
   if (!token) {
-    return res
-      .status(401)
-      .render('403');
+    return res.status(401).render("403");
   }
 
   try {
@@ -49,6 +47,40 @@ export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
 
     // Call next to move to the next middleware or route handler
     next();
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    return res
+      .status(401)
+      .json({ success: false, message: "Token verification failed" });
+  }
+};
+
+export const isLoggedIn = async (req, res, next) => {
+  // Get the token from the request headers, query parameters, or cookies
+  const token =
+    req.headers.authorization || req.query.token || req.cookies.token;
+
+  if (!token) {
+    // User is not logged in, move to the next middleware or route handler
+    return next();
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, TOKEN_SECRET);
+
+    // Set req.user to the decoded payload
+    req.user = decoded;
+
+    // Redirect to appropriate home page based on user's role
+    if (req.user.role === "faculty") {
+      return res.redirect("/faculty/home");
+    } else if (req.user.role === "student") {
+      return res.redirect("/student/home");
+    }
+
+    // Unknown role, return an error response
+    return res.status(403).render("403");
   } catch (error) {
     console.error("Error verifying token:", error);
     return res
