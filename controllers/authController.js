@@ -96,7 +96,11 @@ export const handleFacultyLogin = async (req, res) => {
           ...responseObject,
           token: token.token,
         };
-        res.cookie("token", token?.token, { maxAge: 900000, httpOnly: true });
+        res.cookie("token", token?.token, {
+          maxAge: 900000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV == "prod",
+        });
         return res.status(statusCode).json(responseObject);
       }
     }
@@ -246,7 +250,11 @@ export const handleStudentLogin = async (req, res) => {
           ...responseObject,
           token: token.token,
         };
-        res.cookie("token", token?.token, { maxAge: 1200000, httpOnly: true });
+        res.cookie("token", token?.token, {
+          maxAge: 1200000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV == "prod",
+        });
         return res.status(statusCode).json(responseObject);
       }
     }
