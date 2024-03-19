@@ -314,8 +314,8 @@ export const handleFetchTutorById = async (req, res) => {
 export const handleApplyTutor = async (req, res) => {
   try {
     const { studentId } = req.session ?? 1;
-    const { skillId, description } = req.body;
-    const result = await applyForTutor(studentId, skillId, description);
+    const { skillId, title, description } = req.body;
+    const result = await applyForTutor(studentId, skillId, title, description);
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {
     res.status(500).json({

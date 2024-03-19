@@ -414,9 +414,13 @@ export const getTutorDetailsById = async (id) => {
   }
 };
 
-export const applyForTutor = async (studentId = 1, skillId, description) => {
+export const applyForTutor = async (
+  studentId = 1,
+  skillId,
+  title,
+  description
+) => {
   try {
-    console.log(studentId, skillId, description);
     const tutorExistsQuery = {
       text: `
             SELECT tutor_id FROM TutorInfo
@@ -438,10 +442,11 @@ export const applyForTutor = async (studentId = 1, skillId, description) => {
         INSERT INTO TutorInfo(
             student_id, 
             skill_id, 
+            tutor_title,
             skill_description
-        ) VALUES ($1, $2, $3)
+        ) VALUES ($1, $2, $3, $4)
       `,
-      values: [studentId, skillId, description],
+      values: [studentId, skillId, title, description],
     };
 
     const { rowCount, rows } = await pool.query(query);
