@@ -478,3 +478,84 @@ export const applyForTutor = async (
     };
   }
 };
+
+export const addStudentSkill = async (studentId, skillId) => {
+  try {
+    const checkQuery = {
+      text: `
+      SELECT skill_id FROM StudentSkillsInfo 
+      WHERE student_id =$1 
+        AND skill_id = $2`,
+      values: [studentId, skillId],
+    };
+
+    const checkResults = await pool.query(checkQuery);
+
+    if (checkResults.rowCount > 0)
+      return {
+        success: false,
+        message: "Skill already exists",
+      };
+
+    const query = {
+      text: `INSERT INTO StudentSkillsInfo(
+        student_id, skill_id
+        ) VALUES ($1, $2)`,
+      values: [studentId, skillId],
+    };
+
+    const { rowCount } = await pool.query(query);
+
+    return {
+      success: true,
+      message: "Skill added",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const getAllSkillsByStudentId = async (id) => {
+  try {
+    const qurey = {
+      text: `
+      SELECT
+        ssi.student_skill_id,
+        si.skill_name FROM StudentSkillsInfo ssi
+        JOIN SkillsInfo si
+          ON ssi.skill_id = si.skill_id
+        WHERE student_id = $1`,
+      values: [id],
+    };
+
+    const { rows } = await pool.query(qurey);
+    return rows;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const deleteStudentSkill = async (id) => {
+  try {
+    const query = {
+      text: `DELETE FROM StudentSkillsInfo WHERE student_skill_id = $1`,
+      values: [id],
+    };
+    const { rowCount } = await pool.query(query);
+    return {
+      success: rowCount === 1,
+      message:
+        rowCount === 1
+          ? "Skill deleted successfully"
+          : "Skill mapping not found",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};

@@ -1,0 +1,107 @@
+<%- include('./navbar') %>
+
+<section class="flex justify-center">
+    <div class="w-1/2 max-sm:w-fit mx-4 mt-8 p-4 bg-white rounded-lg shadow-lg">
+      <p class="text-gray-700 mb-4">
+        Learning new skills is essential for personal and professional growth. As a
+        student, acquiring relevant skills not only enhances your knowledge but also
+        boosts your profile and increases your chances of success in various fields.
+        Here, you can select a skill from the dropdown and add it to your profile to
+        showcase your expertise.
+      </p>
+      <form>
+        <div class="mb-4">
+          <label for="skill" class="block text-gray-700 font-bold mb-2"
+            >Select a Skill:</label
+          >
+          <select
+            id="skill"
+            name="skill"
+            class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+          >
+            <% for( let i = 0; i < skills.length; i++ ) { %>
+            <option value="<%= skills[i].skill_id %>">
+              <%= skills[i].skill_name %>
+            </option>
+            <% } %>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+        <button
+          type="button"
+          id="addSkill"
+          class="bg-green-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-700"
+        >
+          Add Skill
+        </button>
+      </form>
+    
+      <div class="mt-8">
+        <h3 class="text-xl font-semibold mb-2">Added Skills:</h3>
+        <div id="skillList" class="flex flex-wrap gap-3 justify-center">
+          <% for( let index = 0; index < studentSkills.length; index++ ) { %>
+    
+          <span
+            class="relative px-4 py-2 rounded-md shadow-md border border-green-600"
+          >
+            <%= studentSkills[index].skill_name %>
+            <button
+              data-skill-id="<%= studentSkills[index].student_skill_id %>"
+              type="button"
+              class="delete-skill-btn absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-600 text-white w-6 h-6 rounded-full flex justify-center items-center hover:bg-red-700"
+            >
+              <i class="las la-times"></i>
+            </button>
+          </span>
+          <% } %>
+        </div>
+      </div>
+    </div>
+</section>
+
+<script>
+  $(document).ready(function () {
+    $(document).on("click", "#addSkill", function () {
+      $.ajax({
+        type: "POST",
+        url: "",
+        data: {
+          skillId: $("#skill").val(),
+        },
+        success: function (response) {
+          if (!response.success) {
+            alert(response.message);
+          } else {
+            location.reload();
+          }
+        },
+        error: function (error) {
+          alert("Unable to prcoess request");
+        },
+      });
+    });
+
+    $(document).on("click", ".delete-skill-btn", function () {
+      const id = $(this).data("skill-id");
+      $.ajax({
+        type: "DELETE",
+        url: "",
+        data: {
+          skillId: id,
+        },
+        success: function (response) {
+          if (!response.success) {
+            alert(response.message);
+          } else {
+            location.reload();
+          }
+        },
+        error: function (error) {
+          alert("Unable to prcoess request");
+        },
+      });
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
