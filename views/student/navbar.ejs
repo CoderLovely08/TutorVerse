@@ -21,18 +21,23 @@
     <header class="bg-white shadow-lg">
       <nav class="flex justify-between items-center px-4 py-2">
         <!-- Logo -->
-        <a href="/">
-          <div
-            class="border-4 px-2 py-1 max-sm:px-1 max-sm:py-1 border-black shadow-md rounded-md"
-          >
-            <h1 class="text-2xl max-sm:text-lg font-bold">
-              TUTOR
-              <span class="bg-black text-white px-2 max-sm:px-1 rounded-md"
-                >VERSE</span
-              >
-            </h1>
-          </div>
-        </a>
+        <div class="flex gap-2">
+          <button id="sidebar-btn">
+            <span class="las la-bars text-2xl font-bold"></span>
+          </button>
+          <a href="/">
+            <div
+              class="border-4 px-2 py-1 max-sm:px-1 max-sm:py-1 border-black shadow-md rounded-md"
+            >
+              <h1 class="text-2xl max-sm:text-lg font-bold">
+                TUTOR
+                <span class="bg-black text-white px-2 max-sm:px-1 rounded-md"
+                  >VERSE</span
+                >
+              </h1>
+            </div>
+          </a>
+        </div>
 
         <!-- User Icon and Logout Button -->
         <div class="flex items-center">
@@ -54,13 +59,51 @@
       </nav>
     </header>
 
+    <aside
+      id="sidebar"
+      class="absolute w-36 h-screen bg-gray-900 rounded-r-lg shadow-lg z-50 duration-300 overflow-hidden"
+    >
+    <h1 class="bg-gray-700 uppercase text-2xl max-md:text-xl max-sm:text-lg font-bold text-white flex justify-center items-center gap-1 py-2"><span class="las la-chevron-circle-down"></span> Menu</h1>
+      <div class="flex flex-col items-center h-full text-white py-4">
+        <ul class="text-sm py-2 flex flex-col gap-16">
+          <li class="text-lg font-bold text-center bg-white rounded-md text-black py-1 px-6">
+            <a href="/student/home"><span class="font-bold text-2xl mx-1 las la-home"></span>
+              <br>
+              Home</a>
+          </li>
+          <li class="text-lg font-bold text-center bg-white rounded-md text-black py-1 px-6">
+            <a href="/student/skill"><span class="font-bold text-2xl mx-1 las la-crosshairs"></span>
+              <br>
+              Skills</a>
+          </li>
+          <li class="text-lg font-bold text-center bg-white rounded-md text-black py-1 px-6">
+            <a href="/tutor/home"><span class="font-bold text-2xl mx-1 las la-chalkboard-teacher"></span>
+              <br>
+              Tutor</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
     <script>
       $(document).ready(function () {
+        var isSidebarOpen = false;
+        // Sidebar button
+        $(document).on("click", "#sidebar-btn", function () {
+          isSidebarOpen = !isSidebarOpen;
+          if (isSidebarOpen) {
+            $("#sidebar").removeClass("w-36");
+            $("#sidebar").addClass("w-0");
+          } else {
+            $("#sidebar").removeClass("w-0");
+            $("#sidebar").addClass("w-36");
+          }
+        });
+        // Logout button
         $("#logout-btn").on("click", function () {
-  
-            let confirmOption = confirm("Are you sure to logout?");
+          let confirmOption = confirm("Are you sure to logout?");
           if (!confirmOption) return;
-  
+
           $.ajax({
             type: "POST",
             url: "/auth/logout",
