@@ -408,7 +408,8 @@ export const getTutorDetailsById = async (id) => {
               ci.course_name,
               bi.branch_name,
               semi.semester_name,
-              fi.faculty_full_name
+              fi.faculty_full_name,
+              ti.created_at
             FROM TutorInfo ti
             JOIN StudentInfo si
                 ON si.student_id = ti.student_id

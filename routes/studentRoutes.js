@@ -3,6 +3,7 @@ import {
   handleDeleteStudentSkills,
   handlePostStudentSkills,
   handlePostTutor,
+  handleViewSearch,
   handleViewStudentHome,
   handleViewStudentLogin,
   handleViewStudentRegister,
@@ -21,12 +22,16 @@ router
   .route("/skill")
   .get(verifyTokenMiddleware(["student"]), handleViewStudentSkills)
   .post(verifyTokenMiddleware(["student"]), handlePostStudentSkills)
-  .delete(verifyTokenMiddleware(["student"]), handleDeleteStudentSkills)
+  .delete(verifyTokenMiddleware(["student"]), handleDeleteStudentSkills);
 
 router
-  .route('/tutor')
+  .route("/tutor")
   .get(verifyTokenMiddleware(["student"]), handleViewTutorHome)
-  .post(verifyTokenMiddleware(["student"]), handlePostTutor)
+  .post(verifyTokenMiddleware(["student"]), handlePostTutor);
+
+router
+  .route("/search")
+  .get(verifyTokenMiddleware(["student"]), handleViewSearch);
 
 router.route("/register").get(isLoggedIn, handleViewStudentRegister);
 

@@ -17,7 +17,7 @@ export const handleViewStudentHome = async (req, res) => {
     if (result.success)
       res.render("student/home", {
         studentData: result.data[0],
-        tutorData: tutorData.data[0]
+        tutorData: tutorData.data[0],
       });
     else throw Error("Error fetching student profile data");
   } catch (error) {
@@ -103,8 +103,11 @@ export const handleViewStudentLogin = async (req, res) => {
 export const handleViewTutorHome = async (req, res) => {
   try {
     const skills = await getAllSkills();
+    const tutorData = await getTutorDetailsById(req.user.userId);
+
     res.render("student/tutor", {
-      skills: skills.data
+      skills: skills.data,
+      tutorData: tutorData.data[0],
     });
   } catch (error) {
     res.render("404");
@@ -115,8 +118,7 @@ export const handlePostTutor = async (req, res) => {
   try {
     const { userId } = req.user;
     const { skillId, description } = req.body;
-    
-    
+
     res.json({
       success: false,
       message: "Ky re lode",
@@ -126,5 +128,13 @@ export const handlePostTutor = async (req, res) => {
       success: false,
       message: "Ky re lode",
     });
+  }
+};
+
+export const handleViewSearch = async (req, res) => {
+  try {
+    res.render("student/search");
+  } catch (error) {
+    res.render("404");
   }
 };

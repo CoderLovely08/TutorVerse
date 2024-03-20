@@ -128,6 +128,8 @@
                     <span class="text-white font-semibold px-2 py-1 bg-red-600 rounded-md shadow-md">Not Verified <span
                         class="las la-times-circle"></span></span>
                     <% } %>
+
+                    <p class="text-gray-600 my-1">Applied on: <span><%= new Date(tutorData.created_at).toDateString() %></span></p>
               </div>
 
               <% } else { %>

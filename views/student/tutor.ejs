@@ -4,7 +4,9 @@
   class="flex justify-center w-full max-sm:w-fit mx-2 bg-gray-200 py-4 px-2"
 >
   <div class="w-1/2 max-sm:w-fit mx-2 mt-8 p-6 bg-white rounded-lg shadow-lg">
-    <h2 class="text-2xl font-semibold text-center mb-4">Apply as a Tutor</h2>
+    <h2 class="text-2xl font-semibold text-center mb-4">Apply as a Tutor
+        <%= (tutorData) && "(Edit Mode)" %>
+    </h2>
 
     <div class="mb-6">
       <p class="text-gray-600 text-sm mb-2">
@@ -36,6 +38,7 @@
             type="text"
             placeholder="Web Developer"
             class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+            <% if (tutorData) { %> value="<%= tutorData.tutor_title %>" <% } %>
             required
           />
         </div>
@@ -47,10 +50,11 @@
             id="skill"
             name="skill"
             class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+            <% if (tutorData) { %> disabled <% } %>
             required
           >
             <% for( let i=0; i < skills.length; i++ ) { %>
-            <option value="<%= skills[i].skill_id %>">
+            <option value="<%= skills[i].skill_id %>" <% if (tutorData && skills[i].skill_name===tutorData.skill_name) { %> selected <% } %>>
               <%= skills[i].skill_name %>
             </option>
             <% } %>
@@ -69,7 +73,7 @@
             minlength="30"
             required
             placeholder="For example, I have been working with JavaScript for 3 years and have completed several projects showcasing my expertise."
-          ></textarea>
+          ><%= (tutorData) && tutorData.skill_description %></textarea>
         </div>
 
         <button
