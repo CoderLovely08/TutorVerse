@@ -2,10 +2,12 @@ import { Router } from "express";
 import {
   handleDeleteStudentSkills,
   handlePostStudentSkills,
+  handlePostTutor,
   handleViewStudentHome,
   handleViewStudentLogin,
   handleViewStudentRegister,
   handleViewStudentSkills,
+  handleViewTutorHome,
 } from "../controllers/studentController.js";
 import { isLoggedIn, verifyTokenMiddleware } from "../middlewares/jwt.js";
 
@@ -20,6 +22,11 @@ router
   .get(verifyTokenMiddleware(["student"]), handleViewStudentSkills)
   .post(verifyTokenMiddleware(["student"]), handlePostStudentSkills)
   .delete(verifyTokenMiddleware(["student"]), handleDeleteStudentSkills)
+
+router
+  .route('/tutor')
+  .get(verifyTokenMiddleware(["student"]), handleViewTutorHome)
+  .post(verifyTokenMiddleware(["student"]), handlePostTutor)
 
 router.route("/register").get(isLoggedIn, handleViewStudentRegister);
 

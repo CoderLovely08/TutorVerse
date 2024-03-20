@@ -1,140 +1,150 @@
 <%- include('./navbar') %>
 
-<main class="bg-gray-50 flex justify-center px-4 py-8 h-fit">
-  <section
-    class="flex flex-col bg-gray-100 border shadow-lg rounded-lg w-4/5 h-2/3 max-md:h-full items-center justify-center"
-  >
-    <!-- User profile card -->
-    <div class="flex justify-between w-full">
-      <div class="w-1/2 h-full max-md:w-full mx-4 bg-white rounded-lg shadow-lg m-4">
-        <!-- Profile Image -->
-        <div class="relative flex gap-2 items-center px-4 py-2">
-          <div
-            class="absolute top-0 left-0 w-full h-1/2 bg-gray-800 rounded-t-lg z-0"
-          ></div>
-          <img
-            src="../images/avatar/panda.png"
-            alt="Profile Image"
-            class="w-auto h-36 max-md:h-24 max-sm:h-16 rounded-full shadow-lg z-10 border"
-          />
-          <div class="flex flex-col z-10">
-            <h1
-              class="text-2xl max-sm:text-lg font-bold text-white font-sans text-wrap"
-            >
-              <%= studentData.student_full_name %>
-            </h1>
-            <span class="font-bold flex items-center gap-1 max-sm:text-md"
-              ><i class="text-xl las la-phone"></i
-              ><span class="max-sm:text-sm text-wrap"><%= studentData.student_phone_number %></span></span
-            >
+  <main class="bg-gray-50 flex justify-center px-4 py-8 h-fit">
+    <section
+      class="flex flex-col bg-gray-100 border shadow-lg rounded-lg w-4/5 h-2/3 max-md:h-full items-center justify-center">
+      <!-- User profile card -->
+      <div class="flex justify-between w-full">
+        <div class="w-1/2 h-full max-md:w-full mx-4 bg-white rounded-lg shadow-lg m-4">
+          <!-- Profile Image -->
+          <div class="relative flex gap-2 items-center px-4 py-2">
+            <div class="absolute top-0 left-0 w-full h-1/2 bg-gray-800 rounded-t-lg z-0"></div>
+            <img src="../images/avatar/panda.png" alt="Profile Image"
+              class="w-auto h-36 max-md:h-24 max-sm:h-16 rounded-full shadow-lg z-10 border" />
+            <div class="flex flex-col z-10">
+              <h1 class="text-2xl max-sm:text-lg font-bold text-white font-sans text-wrap">
+                <%= studentData.student_full_name %>
+              </h1>
+              <span class="font-bold flex items-center gap-1 max-sm:text-md"><i class="text-xl las la-phone"></i><span
+                  class="max-sm:text-sm text-wrap">
+                  <%= studentData.student_phone_number %>
+                </span></span>
+            </div>
           </div>
-        </div>
-        <!-- Basic Personal Info -->
-        <div class="p-4">
-          <!-- Email -->
-          <span class="font-bold flex items-center gap-1 max-sm:text-md"
-            ><i class="text-xl las la-envelope"></i
-            ><span class="max-sm:text-sm text-wrap"
-              ><%= studentData.student_email %></span
-            ></span
-          >
-          <!-- Birthday -->
-          <span class="font-bold flex items-center gap-1 max-sm:text-md"
-            ><i class="text-xl las la-birthday-cake"></i
-            ><span class="max-sm:text-sm text-wrap"><%= new Date(studentData.student_dob).toDateString() %></span></span
-          >
-        </div>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg h-1/2 m-4">
-        <h2 class="text-lg font-bold mb-2 bg-gray-800 text-white p-4 rounded-t-lg">
-          Academic Info
-        </h2>
-        <!-- Content of Academic Info goes here -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
-          <!-- Course -->
-          <div class="shadow-md rounded-md border hover:border-black">
-            <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">Course:</h1>
-            <p class="m-2 font-semibold">
-              <%= studentData.course_name %>
-            </p>
-          </div>
-      
-          <!-- Branch -->
-          <div class="shadow-md rounded-md border hover:border-black">
-            <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">Branch:</h1>
-            <p class="m-2 font-semibold">
-              <%= studentData.branch_name %>
-            </p>
-          </div>
-      
-          <!-- Semester -->
-          <div class="shadow-md rounded-md border hover:border-black">
-            <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">Semester:</h1>
-            <p class="m-2 font-semibold">
-              <%= studentData.semester_name %>
-            </p>
-          </div>
-      
-          <div class="shadow-md rounded-md border hover:border-black">
-            <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">PRN/Enrollment:</h1>
-            <p class="m-2 font-semibold">
-              <%= studentData.student_university_id %>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Academic Info -->
-    <div class="flex flex-col w-full h-fit">
-      
-
-     <div class="bg-white rounded-lg shadow-lg h-1/2 m-4">
-       <div class="flex justify-between bg-gray-800 text-white p-4 rounded-t-lg">
-         <h2 class="text-lg font-bold ">
-           Tutor Profile
-         </h2>
-         <button class="bg-white text-black font-bold px-2 py-1 rounded-md shadow-md">Edit</button>
-       </div>
+          <!-- Basic Personal Info -->
           <div class="p-4">
-               <!-- Title -->
-     
-               <!-- Description -->
-               <p class="text-gray-700 mb-4 font-semibold">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet vehicula
-                    odio.</p>
-     
-               <!-- List of Skills -->
-               <div class="mb-4">
-                    <h3 class="text-md font-semibold mb-2"># Skills</h3>
-                    <div class="flex gap-2">
-                      <span class="px-4 py-2 rounded-md shadow-md border border-green-600">C++</span>
-                      <span class="px-4 py-2 rounded-md shadow-md border border-green-600">Java</span>
-                    </div>
-               </div>
-     
-               <!-- Rating -->
-               <div class="mb-4">
-                    <h3 class="text-md font-semibold mb-2"># Rating</h3>
-                    <div class="flex items-center">
-                         <span class="text-yellow-500 mr-2 las la-star"></span>
-                         <span class="text-yellow-500 mr-2 las la-star"></span>
-                         <span class="text-yellow-500 mr-2 las la-star"></span>
-                         <span class="text-yellow-500 mr-2 las la-star"></span>
-                         <span class="text-yellow-500 mr-2 las la-star"></span>
-                         <span> (5 Reviews)</span>
-                    </div>
-               </div>
-     
-               <!-- Verification Status -->
-               <div>
-                    <h3 class="text-md font-semibold mb-2"># Verification Status</h3>
-                    <span class="text-white font-semibold px-2 py-1 bg-green-600 rounded-md shadow-md">Verified <span class="las la-check-circle"></span></span>
-                    <!-- Change to text-red-500 for unverified status -->
-               </div>
+            <!-- Email -->
+            <span class="font-bold flex items-center gap-1 max-sm:text-md"><i class="text-xl las la-envelope"></i><span
+                class="max-sm:text-sm text-wrap">
+                <%= studentData.student_email %>
+              </span></span>
+            <!-- Birthday -->
+            <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                class="text-xl las la-birthday-cake"></i><span class="max-sm:text-sm text-wrap">
+                <%= new Date(studentData.student_dob).toDateString() %>
+              </span></span>
           </div>
-     </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg h-1/2 m-4">
+          <h2 class="text-lg font-bold mb-2 bg-gray-800 text-white p-4 rounded-t-lg">
+            Academic Info
+          </h2>
+          <!-- Content of Academic Info goes here -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+            <!-- Course -->
+            <div class="shadow-md rounded-md border hover:border-black">
+              <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">Course:</h1>
+              <p class="m-2 font-semibold">
+                <%= studentData.course_name %>
+              </p>
+            </div>
 
-  </section>
-</main>
+            <!-- Branch -->
+            <div class="shadow-md rounded-md border hover:border-black">
+              <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">Branch:</h1>
+              <p class="m-2 font-semibold">
+                <%= studentData.branch_name %>
+              </p>
+            </div>
 
-<%- include('../partials/footer') %>
+            <!-- Semester -->
+            <div class="shadow-md rounded-md border hover:border-black">
+              <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">Semester:</h1>
+              <p class="m-2 font-semibold">
+                <%= studentData.semester_name %>
+              </p>
+            </div>
+
+            <div class="shadow-md rounded-md border hover:border-black">
+              <h1 class="px-2 py-1 bg-gray-800 text-white font-bold rounded-t-md">PRN/Enrollment:</h1>
+              <p class="m-2 font-semibold">
+                <%= studentData.student_university_id %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Academic Info -->
+      <div class="flex flex-col w-full h-fit">
+
+
+        <div class="bg-white rounded-lg shadow-lg h-1/2 m-4">
+          <div class="flex justify-between bg-gray-800 text-white p-4 rounded-t-lg">
+            <h2 class="text-lg font-bold ">
+              Tutor Profile
+            </h2>
+            <a href="/student/tutor"><button
+                class="bg-white text-black font-bold px-2 py-1 rounded-md shadow-md">Edit</button>
+            </a>
+          </div>
+          <div class="p-4">
+            <% if (tutorData) { %>
+              <!-- Title -->
+              <h2 class="text-2xl font-semibold mb-4">#<%= tutorData.tutor_title%>
+              </h2>
+
+              <!-- Description -->
+              <p class="text-gray-700 mb-4 font-semibold">
+                <%= tutorData.skill_description %>
+              </p>
+
+              <!-- List of Skills -->
+              <div class="mb-4">
+                <h3 class="text-md font-semibold mb-2"># Skill</h3>
+                <span class="px-4 py-2 rounded-md shadow-md border border-green-600">
+                  <%= tutorData.skill_name %>
+                </span>
+              </div>
+
+              <!-- Rating -->
+              <div class="mb-4">
+                <h3 class="text-md font-semibold mb-2"># Rating</h3>
+                <div class="flex items-center">
+                  <% for (let i=0; i < Math.floor(parseFloat(tutorData.tutor_rating)); i++) { %>
+                    <span class="text-yellow-500 mr-2 las la-star"></span>
+                    <% } %>
+                      <span> (<%= tutorData.tutor_rating %> Rating)</span>
+                </div>
+              </div>
+
+              <!-- Verification Status -->
+              <div>
+                <h3 class="text-md font-semibold mb-2"># Verification Status</h3>
+                <% if (tutorData.is_verified) { %>
+                  <span class="text-white font-semibold px-2 py-1 bg-green-600 rounded-md shadow-md">Verified <span
+                      class="las la-check-circle"></span></span>
+                  <% } else { %>
+                    <span class="text-white font-semibold px-2 py-1 bg-red-600 rounded-md shadow-md">Not Verified <span
+                        class="las la-times-circle"></span></span>
+                    <% } %>
+              </div>
+
+              <% } else { %>
+                <!-- Informational Text Section -->
+                <p class="text-gray-700 mb-4 font-semibold">Unlock the benefits of becoming a tutor and enhance your
+                  skills while
+                  helping others. Apply now!</p>
+                <!-- Apply Button -->
+                <a href="/student/tutor"><button
+                    class="bg-black text-white px-4 py-2 rounded-md shadow-md hover:bg-white hover:text-black border border-black">Apply
+                    Now</button></a>
+                <% } %>
+          </div>
+
+        </div>
+
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>

@@ -358,7 +358,7 @@ export const getAllTutors = async (status) => {
         fi.faculty_full_name
       FROM TutorInfo ti
       JOIN StudentInfo si
-          ON si.student_id = ti.tutor_id
+          ON si.student_id = ti.student_id
       JOIN SkillsInfo ski
           ON ski.skill_id = ti.skill_id
       JOIN CourseInfo ci
@@ -393,9 +393,25 @@ export const getTutorDetailsById = async (id) => {
   try {
     const query = {
       text: `
-            SELECT * FROM TutorInfo ti
+            SELECT 
+              ti.tutor_id,
+              si.student_id,
+              si.student_full_name,
+              ti.tutor_title,
+              ski.skill_name,
+              ti.skill_description,
+              ti.is_verified,
+              ti.tutor_rating,
+              si.student_email,
+              si.student_phone_number,
+              si.student_profile_src,
+              ci.course_name,
+              bi.branch_name,
+              semi.semester_name,
+              fi.faculty_full_name
+            FROM TutorInfo ti
             JOIN StudentInfo si
-                ON si.student_id = ti.tutor_id
+                ON si.student_id = ti.student_id
             JOIN SkillsInfo ski
                 ON ski.skill_id = ti.skill_id
             JOIN CourseInfo ci

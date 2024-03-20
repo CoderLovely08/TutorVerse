@@ -1,0 +1,149 @@
+<%- include('./navbar') %>
+
+<section
+  class="flex justify-center w-full max-sm:w-fit mx-2 bg-gray-200 py-4 px-2"
+>
+  <div class="w-1/2 max-sm:w-fit mx-2 mt-8 p-6 bg-white rounded-lg shadow-lg">
+    <h2 class="text-2xl font-semibold text-center mb-4">Apply as a Tutor</h2>
+
+    <div class="mb-6">
+      <p class="text-gray-600 text-sm mb-2">
+        Please fill out the form below to apply as a tutor:
+        <br />
+        <em class="font-bold"
+          >Note: It is recommended to update your profile picture before
+          applying for tutor.</em
+        >
+      </p>
+      <div
+        class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4"
+      >
+        <p>
+          <strong>Heads up!</strong> At the moment, you can only apply for the
+          tutor role with one skill. But don't worry! We're working on a feature
+          that will allow you to apply with multiple skills soon.
+        </p>
+      </div>
+
+      <form>
+        <div class="mb-4">
+          <label for="title" class="block text-gray-700 font-bold mb-2"
+            >Title:</label
+          >
+          <input
+            id="title"
+            name="title"
+            type="text"
+            placeholder="Web Developer"
+            class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+            required
+          />
+        </div>
+        <div class="mb-4">
+          <label for="skill" class="block text-gray-700 font-bold mb-2"
+            >Select a Skill:</label
+          >
+          <select
+            id="skill"
+            name="skill"
+            class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+            required
+          >
+            <% for( let i=0; i < skills.length; i++ ) { %>
+            <option value="<%= skills[i].skill_id %>">
+              <%= skills[i].skill_name %>
+            </option>
+            <% } %>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="description" class="block text-gray-700 font-bold mb-2"
+            >Why are you good at this skill?</label
+          >
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            class="resize-none block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+            minlength="30"
+            required
+            placeholder="For example, I have been working with JavaScript for 3 years and have completed several projects showcasing my expertise."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="bg-green-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-green-700 w-full"
+        >
+          Submit Application
+        </button>
+      </form>
+    </div>
+
+    <div class="bg-gray-100 rounded-lg p-4">
+      <h3 class="text-lg font-semibold mb-2">Instructions:</h3>
+      <ul class="list-disc pl-4 text-sm">
+        <li>Choose a skill you are proficient in.</li>
+        <li>Describe why you are good at this skill.</li>
+        <li>Make sure to provide detailed and relevant information.</li>
+        <li>
+          Remember, providing detailed descriptions helps you earn ratings.
+        </li>
+        <li>Top-rated tutors get rewarded every month.</li>
+        <li>
+          After submitting your application, a faculty member will review it.
+        </li>
+        <li>
+          You can check the verification status of your application on the home
+          screen.
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  $(document).ready(function () {
+    $("form").submit(function (event) {
+      // Prevent the default form submission
+      event.preventDefault();
+
+      // Get form data
+      var formData = {
+        title: $("#title").val().trim(),
+        skillId: $("#skill").val(),
+        description: $("#description").val().trim(),
+      };
+
+      // Send AJAX request
+      $.ajax({
+        type: "POST",
+        url: "/api/tutor", // Assumes the same URL pattern
+        data: formData,
+        success: function (response) {
+          // Handle success response
+          if (response.success) {
+            alert(response.message);
+            window.location.href = "/student/home";
+          } else {
+            alert(response.message);
+          }
+        },
+        error: function (xhr, status, error) {
+          // If there's an error with the request, handle the error response
+          if (xhr.status === 400 || xhr.status === 401) {
+            // Parse the error response JSON to get the message
+            var errorMessage = JSON.parse(xhr.responseText).message;
+            alert(errorMessage);
+          } else {
+            // For other errors, log the error to the console
+            console.log(error);
+          }
+        },
+      });
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>

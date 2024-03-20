@@ -7,14 +7,17 @@ import {
   getAllSkills,
   getAllSkillsByStudentId,
   getStudentDetailsById,
+  getTutorDetailsById,
 } from "../modules/DbHelper.js";
 
 export const handleViewStudentHome = async (req, res) => {
   try {
     const result = await getStudentDetailsById(req.user.userId);
+    const tutorData = await getTutorDetailsById(req.user.userId);
     if (result.success)
       res.render("student/home", {
         studentData: result.data[0],
+        tutorData: tutorData.data[0]
       });
     else throw Error("Error fetching student profile data");
   } catch (error) {
@@ -71,10 +74,8 @@ export const handleDeleteStudentSkills = async (req, res) => {
       success: result.success,
       message: result.message,
     });
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
 export const handleViewStudentRegister = async (req, res) => {
   try {
@@ -96,5 +97,34 @@ export const handleViewStudentLogin = async (req, res) => {
     res.render("student/login");
   } catch (error) {
     res.render("404");
+  }
+};
+
+export const handleViewTutorHome = async (req, res) => {
+  try {
+    const skills = await getAllSkills();
+    res.render("student/tutor", {
+      skills: skills.data
+    });
+  } catch (error) {
+    res.render("404");
+  }
+};
+
+export const handlePostTutor = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const { skillId, description } = req.body;
+    
+    
+    res.json({
+      success: false,
+      message: "Ky re lode",
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Ky re lode",
+    });
   }
 };

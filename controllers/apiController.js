@@ -249,10 +249,11 @@ export const handleFetchAllFaculty = async (req, res) => {
 export const handleFetchAllTutors = async (req, res) => {
   try {
     const { status } = req.query;
-    if (!status || !validator.isBoolean(status)) return res.json({
-      success: false,
-      message: "Param 'status' of type boolean is missing"
-    });
+    if (!status || !validator.isBoolean(status))
+      return res.json({
+        success: false,
+        message: "Param 'status' of type boolean is missing",
+      });
     const result = await getAllTutors(status);
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {
@@ -313,10 +314,24 @@ export const handleFetchTutorById = async (req, res) => {
 
 export const handleApplyTutor = async (req, res) => {
   try {
-    const { studentId } = req.session ?? 1;
+    const { userId } = req.user;
     const { skillId, title, description } = req.body;
-    const result = await applyForTutor(studentId, skillId, title, description);
-    res.status(result.success ? 200 : 404).json(result);
+
+    if (!validator.isAlpha(title.replaceAll(" ", "")))
+      return res.json({
+        success: false,
+        message: "Title can only contain uppercase and lowercase letters",
+      });
+
+    if (!description || description.length < 30)
+      return res.json({
+        success: false,
+        message: "Provide an elaborated description about your skill",
+      });
+
+    const result = await applyForTutor(userId, skillId, title, description);
+    console.log(result);
+    res.status(result.success ? 200 : 401).json(result);
   } catch (error) {
     res.status(500).json({
       success: false,
