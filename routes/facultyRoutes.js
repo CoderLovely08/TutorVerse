@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   handleViewFacultyHome,
   handleViewFacultyLogin,
+  handleViewFacultyRegister,
 } from "../controllers/facultyController.js";
 import { isLoggedIn, verifyTokenMiddleware } from "../middlewares/jwt.js";
 
@@ -12,4 +13,6 @@ router
   .get(verifyTokenMiddleware(["faculty"]), handleViewFacultyHome);
 
 router.route("/login").get(isLoggedIn, handleViewFacultyLogin);
+
+router.route("/register").get(isLoggedIn, handleViewFacultyRegister);
 export default router;
