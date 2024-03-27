@@ -2,6 +2,7 @@ import {
   getAllBranches,
   getAllCourses,
   getAllStudents,
+  getAllUnverifiedStudents,
   getFacultyById,
   getVerifiedStudentCountByFaculty,
 } from "../modules/DbHelper.js";
@@ -53,3 +54,17 @@ export const handleViewFacultyDashboard = async (req, res) => {
     res.render("error");
   }
 };
+
+export const handleViewFacultyVerifyPage = async (req, res) => {
+  try {
+    const { courseId, branchId } = req.user;
+    const students = await getAllUnverifiedStudents(courseId, branchId);
+    console.log(students);
+    res.render("faculty/verify", {
+      studentsData: students.data,
+    });
+  } catch (error) {
+    res.render("error");
+  }
+};
+

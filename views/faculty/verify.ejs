@@ -1,0 +1,136 @@
+<%- include('./navbar') %>
+
+    <main class="flex w-auto m-4 p-4 justify-center">
+        <section class="bg-white w-full p-2">
+            <div class="bg-blue-300 border-l-4 border-blue-500 text-blue-800 p-4 rounded my-4">
+                <p>
+                    <strong class="text-2xl font-bold">Hey Faculty!</strong class="textl-2xl font-bold">
+                    <br>
+                    Here you can view list of all the students
+                    who have applied for the tutor role, click on <strong>Accept</strong> to
+                    accept their application.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-4 justify-center items-center">
+                <% for( let i=0; i < studentsData.length; i++ ) { %>
+                    <div class="bg-white rounded-lg shadow-lg w-1/2 max-md:w-full h-1/2">
+                        <!-- Profile Image -->
+                        <div class="relative flex gap-2 items-center px-4 py-2">
+                            <div class="absolute top-0 left-0 w-full h-1/2 bg-gray-800 rounded-t-lg z-0"></div>
+                            <img src="../images/avatar/panda.png" alt="Profile Image"
+                                class="w-auto h-36 max-md:h-24 max-sm:h-16 rounded-full shadow-lg z-10 border" />
+                            <div class="flex flex-col z-10">
+                                <h1 class="text-2xl max-sm:text-lg font-bold text-white font-sans text-wrap">
+                                    <%= studentsData[i].student_full_name %>
+                                </h1>
+                                <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                                        class="text-xl las la-bullseye"></i><span class="max-sm:text-sm text-wrap">
+                                        <%= studentsData[i].skill_name %>
+                                    </span></span>
+                            </div>
+                        </div>
+                        <!-- Basic Personal Info -->
+                        <div class="flex flex-wrap max-md:flex-col-reverse">
+                            <div class="p-4 w-1/2 max-md:w-full">
+                                <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                                        class="text-xl las la-phone"></i><span class="max-sm:text-sm text-wrap">
+                                        <%= studentsData[i].student_phone_number %>
+                                    </span></span>
+
+                                <!-- Email -->
+                                <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                                        class="text-xl las la-envelope"></i><span class="max-sm:text-sm text-wrap">
+                                        <%= studentsData[i].student_email %>
+                                    </span></span>
+                                <!-- Course -->
+                                <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                                        class="text-xl las la-school"></i><span class="max-sm:text-sm text-wrap">
+                                        <%= studentsData[i].course_name %> - <%= studentsData[i].semester_name %> Sem
+                                    </span></span>
+                                <!-- Branch -->
+                                <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                                        class="text-xl las la-school"></i><span class="max-sm:text-sm text-wrap">
+                                        <%= studentsData[i].branch_name %>
+                                    </span></span>
+                                <!-- PRN -->
+                                <span class="font-bold flex items-center gap-1 max-sm:text-md"><i
+                                        class="text-xl las la-id-card"></i><span class="max-sm:text-sm text-wrap">
+                                        Enrollment Num: <%= studentsData[i].student_university_id %>
+                                    </span></span>
+                            </div>
+                            <div class="p-4 w-1/2 max-md:w-full">
+                                <strong>Title:</strong> <span class="underline">
+                                    <%= studentsData[i].tutor_title %>
+                                </span>
+                                <br>
+                                <strong>Applied for:</strong> <span class="underline">
+                                    <%= studentsData[i].skill_name %>
+                                </span> skill
+                                <p>
+                                    <strong>Description:</strong>
+                                    <%= studentsData[i].skill_description %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 p-2">
+                            <button
+                                class="action-btn w-full font-bold px-2 py-1 border bg-white text-black shadow rounded-lg hover:bg-black hover:text-white transition-all"
+                                data-action="reject" data-tutor-id="<%= studentsData[i].tutor_id %>">Reject</button>
+                            <button
+                                class="action-btn w-full font-bold px-2 py-1 border text-white bg-black shadow rounded-lg hover:bg-white hover:text-black transition-all"
+                                data-action="accept" data-tutor-id="<%= studentsData[i].tutor_id %>">Accept</button>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.action-btn', function () {
+                var actionType = $(this).data('action');
+                const tutorId = $(this).data('tutor-id');
+                var dispacth = actionType == "reject" ? "DELETE" : "PUT";
+                var status = actionType == "accept";
+                var remark = prompt("Enter a remark for the student's application");
+
+                let confirmOption = confirm(`Are you sure to ${actionType} application for this student?`);
+                if (!confirmOption) return;
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/faculty/verify/',
+                    data: {
+                        tutorId,
+                        isVerified: status,
+                        remark
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // If there's an error with the request, handle the error response
+                        if (xhr.status === 404 || xhr.status === 401) {
+                            // Parse the error response JSON to get the message
+                            var errorMessage = JSON.parse(xhr.responseText).message;
+                            alert(errorMessage);
+                        } else {
+                            // For other errors, log the error to the console
+                            alert("Internal Server Error")
+                            console.log(error);
+                        }
+                    }
+                })
+
+            })
+
+        });
+    </script>
+    <%- include('../partials/footer') %>

@@ -281,12 +281,12 @@ export const handleFetchFacultyById = async (req, res) => {
 
 export const handleVerifyStudentById = async (req, res) => {
   try {
-    const { studentId, isVerified } = req.body;
-    const { facultyId } = req.session || 1;
+    const { tutorId, isVerified, remark } = req.body;
+    const { userId } = req.user || 1;
     const result = await markStudentVerifiedById(
-      studentId,
-      facultyId,
-      isVerified
+      tutorId,
+      userId,
+      isVerified, remark
     );
     res.status(result.success ? 200 : 404).json(result);
   } catch (error) {

@@ -104,6 +104,51 @@ export const getAllStudents = async (courseId = 0, branchId = 0) => {
   }
 };
 
+export const getAllUnverifiedStudents = async (courseId = 0, branchId = 0) => {
+  try {
+    let query = {
+      text: `
+            SELECT * FROM StudentInfo si 
+            JOIN CourseInfo ci
+                ON ci.course_id = si.course_id
+            JOIN BranchInfo bi 
+                ON bi.branch_id = si.branch_id
+            JOIN SemesterInfo semi
+                ON semi.semester_id = si.semester_id
+			      JOIN TutorInfo ti
+				        ON ti.student_id = si.student_id
+            JOIN SkillsInfo ski
+              ON ski.skill_id = ti.skill_id
+            WHERE NOT ti.is_verified AND NOT ti.is_rejected
+            `,
+    };
+    let values = [];
+
+    if (courseId != 0) {
+      query.text += ` AND ci.course_id = $${values.length + 1}`;
+      values.push(courseId);
+    }
+
+    if (branchId != 0) {
+      query.text += ` AND bi.branch_id = $${values.length + 1}`;
+      values.push(branchId);
+    }
+
+    const { rows } = await pool.query(query, values);
+    return {
+      success: true,
+      message: "Data fetched",
+      data: rows,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+      data: [],
+    };
+  }
+};
+
 export const getStudentDetailsById = async (studentId = 0) => {
   try {
     const query = {
@@ -305,30 +350,38 @@ export const getFacultyById = async (id) => {
 };
 
 export const markStudentVerifiedById = async (
-  studentId,
+  tutorId,
   facultyId,
-  isVerified
+  isVerified,
+  remark
 ) => {
   try {
     const query = {
       text: `
             UPDATE TutorInfo 
-                SET is_verified = $3, faculty_id = $1 
-            WHERE student_id = $2
+                SET ${
+                  isVerified == "true" ? "is_verified" : "is_rejected"
+                } = $3, faculty_id = $2, faculty_remark = $4
+            WHERE tutor_id = $1
             `,
-      values: [studentId, facultyId, isVerified],
+      values: [tutorId, facultyId, isVerified == "true" ? true : true, remark],
     };
+    console.log(query);
 
     const { rows, rowCount } = await pool.query(query);
+    console.log(rows);
     return {
       success: rowCount == 1,
       message:
         rowCount == 1
-          ? "Student Verified as a tutor"
+          ? isVerified == "true"
+            ? "Student Verified as a tutor"
+            : "Student application rejected"
           : "Student Id does not exists",
       data: rows,
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       message: error.message,
@@ -409,6 +462,8 @@ export const getTutorDetailsById = async (id) => {
               bi.branch_name,
               semi.semester_name,
               fi.faculty_full_name,
+              ti.is_rejected,
+              ti.faculty_remark,
               ti.created_at
             FROM TutorInfo ti
             JOIN StudentInfo si
@@ -424,6 +479,7 @@ export const getTutorDetailsById = async (id) => {
             JOIN FacultyInfo fi 
                 ON fi.faculty_id = ti.faculty_id
             WHERE si.student_id = $1
+            ORDER by ti.tutor_id DESC LIMIT 1
             `,
       values: [id],
     };
@@ -443,17 +499,12 @@ export const getTutorDetailsById = async (id) => {
   }
 };
 
-export const applyForTutor = async (
-  studentId = 1,
-  skillId,
-  title,
-  description
-) => {
+export const applyForTutor = async (studentId = 1, skillId, title, description) => {
   try {
     const tutorExistsQuery = {
       text: `
             SELECT tutor_id FROM TutorInfo
-            WHERE student_id = $1 AND skill_id = $2
+            WHERE student_id = $1 AND skill_id = $2 AND is_verified AND NOT is_rejected
             `,
       values: [studentId, skillId],
     };
@@ -466,6 +517,7 @@ export const applyForTutor = async (
         message: "You are already a tutor for the selected skill",
         data: [],
       };
+
     const query = {
       text: `
         INSERT INTO TutorInfo(
@@ -474,18 +526,21 @@ export const applyForTutor = async (
             tutor_title,
             skill_description
         ) VALUES ($1, $2, $3, $4)
+        ON CONFLICT (student_id, skill_id)
+        DO UPDATE SET
+            tutor_title = EXCLUDED.tutor_title,
+            skill_description = EXCLUDED.skill_description,
+            is_rejected = false
       `,
       values: [studentId, skillId, title, description],
     };
 
-    const { rowCount, rows } = await pool.query(query);
+    const { rowCount } = await pool.query(query);
+
     return {
-      success: rowCount == 1,
-      message:
-        rowCount == 1
-          ? "Application for tutor submitted succesfully"
-          : "Unable to process application.",
-      data: rows,
+      success: rowCount > 0,
+      message: rowCount > 0 ? "Application for tutor submitted successfully" : "Unable to process application.",
+      data: [],
     };
   } catch (error) {
     return {
@@ -577,16 +632,15 @@ export const deleteStudentSkill = async (id) => {
   }
 };
 
-
 export const getVerifiedStudentCountByFaculty = async (id) => {
   try {
     const query = {
       text: `SELECT COUNT(*) FROM TutorInfo WHERE is_verified AND faculty_id = $1`,
-      values: [id]
-    }
+      values: [id],
+    };
     const { rows } = await pool.query(query);
     return rows[0].count;
   } catch (error) {
     return 0;
   }
-}
+};

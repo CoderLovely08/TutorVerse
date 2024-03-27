@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   handleDeleteStudentSkills,
   handlePostStudentSkills,
-  handlePostTutor,
+
   handleViewSearch,
   handleViewStudentHome,
   handleViewStudentLogin,
@@ -27,7 +27,7 @@ router
 router
   .route("/tutor")
   .get(verifyTokenMiddleware(["student"]), handleViewTutorHome)
-  .post(verifyTokenMiddleware(["student"]), handlePostTutor);
+  // .post(verifyTokenMiddleware(["student"]), handlePostTutor);
 
 router
   .route("/search")

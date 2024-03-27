@@ -50,7 +50,7 @@
             id="skill"
             name="skill"
             class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
-            <% if (tutorData) { %> disabled <% } %>
+            <% if (tutorData && !tutorData.is_rejected) { %> disabled <% } %>
             required
           >
             <% for( let i=0; i < skills.length; i++ ) { %>

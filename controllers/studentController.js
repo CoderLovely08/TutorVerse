@@ -114,23 +114,6 @@ export const handleViewTutorHome = async (req, res) => {
   }
 };
 
-export const handlePostTutor = async (req, res) => {
-  try {
-    const { userId } = req.user;
-    const { skillId, description } = req.body;
-
-    res.json({
-      success: false,
-      message: "Ky re lode",
-    });
-  } catch (error) {
-    res.json({
-      success: false,
-      message: "Ky re lode",
-    });
-  }
-};
-
 export const handleViewSearch = async (req, res) => {
   try {
     res.render("student/search");

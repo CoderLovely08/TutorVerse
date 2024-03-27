@@ -74,6 +74,8 @@ CREATE TABLE TutorInfo(
     is_verified BOOLEAN DEFAULT 'false',
     faculty_id INT NOT NULL,
     tutor_rating NUMERIC(2,1),
+    is_rejected BOOLEAN DEFAULT 'false',
+    rejection_reason VARCHAR,
     created_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (student_id) REFERENCES studentInfo(student_id),
     FOREIGN KEY (faculty_id) REFERENCES FacultyInfo(faculty_id)

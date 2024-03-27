@@ -124,9 +124,15 @@
                 <% if (tutorData.is_verified) { %>
                   <span class="text-white font-semibold px-2 py-1 bg-green-600 rounded-md shadow-md">Verified <span
                       class="las la-check-circle"></span></span>
-                  <% } else { %>
-                    <span class="text-white font-semibold px-2 py-1 bg-red-600 rounded-md shadow-md">Not Verified <span
+                  <% } else if(tutorData.is_rejected) { %>
+                    <span class="text-white font-semibold px-2 py-1 bg-red-600 rounded-md shadow-md">Rejected <span
                         class="las la-times-circle"></span></span>
+                        <span>Reason: <%= tutorData.faculty_remark %></span>
+                        <br>
+                        <small><em>To re-apply click on edit and submit your application again </em></small>
+                    <% } else {%>
+                      <span class="text-white font-semibold px-2 py-1 bg-red-600 rounded-md shadow-md">Not Verified <span
+                          class="las la-times-circle"></span></span>
                     <% } %>
 
                     <p class="text-gray-600 my-1">Applied on: <span><%= new Date(tutorData.created_at).toDateString() %></span></p>

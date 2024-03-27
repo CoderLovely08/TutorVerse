@@ -53,7 +53,7 @@ app.use("/faculty", facultyRouter);
 
 // Middleware to handle 404 errors
 app.use((req, res, next) => {
-  res.render("404");
+  res.status(404).render("404");
 });
 
 app.listen(PORT || 3000, (err) => {
