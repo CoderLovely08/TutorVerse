@@ -1,29 +1,139 @@
 <%- include('./navbar') %>
 
-    <section class="flex justify-center items-center min-h-screen bg-gray-100">
-        <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4 text-center">Search Tutors by Skill</h2>
+<section class="flex flex-col items-center min-h-screen bg-gray-100">
+  <!-- Search Container -->
+  <div class="w-full max-w-lg h-fit bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl max-sm:text-lg font-semibold mb-4 text-center">
+      Search Tutors by Skill
+    </h2>
 
-            <!-- Skill Dropdown -->
-            <div class="mb-4">
-                <label for="skill" class="block text-gray-700 font-bold mb-2">Select a Skill:</label>
-                <select id="skill" name="skill"
-                    class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500">
-                    <!-- Options will be populated dynamically -->
-                    <option value="" disabled selected>Select a Skill</option>
-                    <option value="C++">C++</option>
-                    <option value="Python">Python</option>
-                    <option value="JavaScript">JavaScript</option>
-                    <!-- Add more options as needed -->
-                </select>
+    <form
+      action=""
+      method="GET"
+      class="flex items-center justify-between gap-4 w-full"
+    >
+      <!-- Skill Dropdown -->
+      <div class="w-full">
+        <select
+          id="skill"
+          name="skill"
+          class="block w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-green-500"
+          required
+        >
+          <!-- Options will be populated dynamically -->
+          <option value="" disabled selected>Select a Skill</option>
+          <% for( let i=0; i < skills.length; i++ ) { %>
+          <option value="<%= skills[i].skill_id %>">
+            <%= skills[i].skill_name %>
+          </option>
+          <% } %>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+      <!-- Search Button -->
+      <button
+        type="submit"
+        id="searchButton"
+        class="bg-green-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-green-700 w-fit"
+      >
+        Search
+      </button>
+    </form>
+  </div>
+
+  <!-- Result Container -->
+
+  <div class="">
+    <h1 class="text-center pt-4 text-2xl font-bold"><%= tutors.length %> Search result(s)</h1>
+      <div class="flex flex-wrap gap-4 justify-center items-center p-4 w-full ">
+        <% for( let i=0; i < tutors.length; i++ ) { %>
+        <div class="bg-white rounded-lg shadow-lg w-1/3 max-md:w-full h-1/2">
+          <!-- Profile Image -->
+          <div class="relative flex gap-2 items-center px-4 py-2">
+            <div
+              class="absolute top-0 left-0 w-full h-1/2 bg-gray-800 rounded-t-lg z-0"
+            ></div>
+            <img
+              src="../images/avatar/panda.png"
+              alt="Profile Image"
+              class="w-auto h-36 max-md:h-24 max-sm:h-16 rounded-full shadow-lg z-10 border"
+            />
+            <div class="flex flex-col z-10">
+              <h1
+                class="text-2xl max-sm:text-lg font-bold text-white font-sans text-wrap"
+              >
+                <%= tutors[i].student_full_name %>
+              </h1>
+              <span class="font-bold flex items-center gap-1 max-sm:text-md"
+                ><i class="text-xl las la-bullseye"></i
+                ><span class="max-sm:text-sm text-wrap">
+                  <%= tutors[i].skill_name %>
+                </span></span
+              >
             </div>
-
-            <!-- Search Button -->
-            <button type="button" id="searchButton"
-                class="bg-green-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-green-700 w-full">
-                Search
-            </button>
+          </div>
+          <!-- Basic Personal Info -->
+          <div class="flex flex-wrap max-md:flex-col-reverse">
+            <div class="p-4 w-1/2 max-md:w-full">
+              <span class="font-bold flex items-center gap-1 max-sm:text-md"
+                ><i class="text-xl las la-phone"></i
+                ><span class="max-sm:text-sm text-wrap">
+                  <%= tutors[i].student_phone_number %>
+                </span></span
+              >
+              <!-- Email -->
+              <span class="font-bold flex items-center gap-1 max-sm:text-md"
+                ><i class="text-xl las la-envelope"></i
+                ><span class="max-sm:text-sm text-wrap">
+                  <%= tutors[i].student_email %>
+                </span></span
+              >
+              <!-- Course -->
+              <span class="font-bold flex items-center gap-1 max-sm:text-md"
+                ><i class="text-xl las la-school"></i
+                ><span class="max-sm:text-sm text-wrap">
+                  <%= tutors[i].course_name %> - <%= tutors[i].semester_name %> Sem
+                </span></span
+              >
+              <!-- Branch -->
+              <span class="font-bold flex items-center gap-1 max-sm:text-md"
+                ><i class="text-xl las la-school"></i
+                ><span class="max-sm:text-sm text-wrap">
+                  <%= tutors[i].branch_name %>
+                </span></span
+              >
+            </div>
+            <div class="p-4 w-1/2 max-md:w-full">
+              <strong>Title:</strong>
+              <span class="underline"> <%= tutors[i].tutor_title %> </span>
+              <br />
+              <strong>Experienced in:</strong>
+              <span class="underline"> <%= tutors[i].skill_name %> </span> skill
+              <p>
+                <strong>Description:</strong>
+                <%= tutors[i].skill_description %>
+              </p>
+            </div>
+          </div>
         </div>
-    </section>
+        <% } %>
+      </div>
+  </div>
 
-    <%- include('../partials/footer') %>
+  <script>
+    // Function to get query parameters from the URL
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Get the 'skill' query parameter
+        const skillParam = getQueryParam('skill');
+
+        if (skillParam) {
+            // Set the dropdown value to match the 'skill' query parameter
+            $('#skill').val(skillParam);
+        }
+  </script>
+
+<%- include('../partials/footer') %>

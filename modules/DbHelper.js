@@ -390,9 +390,9 @@ export const markStudentVerifiedById = async (
   }
 };
 
-export const getAllTutors = async (status) => {
+export const getAllTutors = async (status, skillId) => {
   try {
-    const query = {
+    let query = {
       text: `
       SELECT 
         ti.tutor_id,
@@ -426,6 +426,11 @@ export const getAllTutors = async (status) => {
       `,
       values: [status],
     };
+
+    if (skillId) {
+      query.text +=` AND ti.skill_id = $2`;
+      query.values.push(skillId);
+    }
 
     const { rows } = await pool.query(query);
     return {
@@ -499,7 +504,12 @@ export const getTutorDetailsById = async (id) => {
   }
 };
 
-export const applyForTutor = async (studentId = 1, skillId, title, description) => {
+export const applyForTutor = async (
+  studentId = 1,
+  skillId,
+  title,
+  description
+) => {
   try {
     const tutorExistsQuery = {
       text: `
@@ -539,7 +549,10 @@ export const applyForTutor = async (studentId = 1, skillId, title, description) 
 
     return {
       success: rowCount > 0,
-      message: rowCount > 0 ? "Application for tutor submitted successfully" : "Unable to process application.",
+      message:
+        rowCount > 0
+          ? "Application for tutor submitted successfully"
+          : "Unable to process application.",
       data: [],
     };
   } catch (error) {

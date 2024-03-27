@@ -6,6 +6,7 @@ import {
   getAllSemesters,
   getAllSkills,
   getAllSkillsByStudentId,
+  getAllTutors,
   getStudentDetailsById,
   getTutorDetailsById,
 } from "../modules/DbHelper.js";
@@ -116,8 +117,16 @@ export const handleViewTutorHome = async (req, res) => {
 
 export const handleViewSearch = async (req, res) => {
   try {
-    res.render("student/search");
+    const { skill } = req.query;
+    const skills = await getAllSkills();
+    const tutors = await getAllTutors(true, skill);
+    ;
+    res.render("student/search", {
+      skills: skills.data,
+      tutors: tutors.data,
+    });
   } catch (error) {
+    console.log(error);
     res.render("404");
   }
 };
