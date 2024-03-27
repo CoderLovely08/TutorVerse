@@ -78,13 +78,9 @@ export const validateFacultyLoginDetails = async (email, password) => {
                     fi.faculty_id, 
                     fi.faculty_full_name, 
                     fi.faculty_email, 
-                    ci.course_name, 
-                    bi.branch_name 
+                    fi.course_id,
+                    fi.branch_id
                 FROM FacultyInfo fi
-                JOIN CourseInfo ci
-                    ON ci.course_id = fi.course_id
-                JOIN BranchInfo bi
-                    on bi.branch_id = fi.branch_id
                 WHERE faculty_email = $1
             `,
             values: [email]

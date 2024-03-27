@@ -1,0 +1,56 @@
+<%- include('./navbar') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+      <style>
+        input{
+          outline: auto;
+        }
+      </style>
+<main class="flex w-full m-4 p-4 justify-center">
+  <section class="w-2/3 h-fit">
+    <div class="table-responsive bg-white p-4 rounded shadow">
+      <table id="student-table" class="border border-black rounded-lg table-bordered table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Branch</th>
+            <th>Semester</th>
+            <th>Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for( let i = 0; i < students.length; i++ ) { %>
+            <tr>
+              <td><%= students[i].student_id %></td>
+              <td><%= students[i].student_full_name %></td>
+              <td><%= students[i].course_name %></td>
+              <td><%= students[i].branch_name %></td>
+              <td><%= students[i].semester_name %></td>
+              <td>
+                <%= students[i].student_phone_number %>
+                <!-- <button class="px-2 py1 bg-green-500 text-white font-bold shadow rounded">View</button> -->
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"
+/>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+
+    var table = $('#student-table').dataTable();
+  });
+</script>
+<%- include('../partials/footer') %>

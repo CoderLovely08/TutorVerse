@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  handleViewFacultyDashboard,
   handleViewFacultyHome,
   handleViewFacultyLogin,
   handleViewFacultyRegister,
@@ -11,6 +12,10 @@ const router = Router();
 router
   .route("/home")
   .get(verifyTokenMiddleware(["faculty"]), handleViewFacultyHome);
+
+  router
+  .route("/dashboard")
+  .get(verifyTokenMiddleware(["faculty"]), handleViewFacultyDashboard);
 
 router.route("/login").get(isLoggedIn, handleViewFacultyLogin);
 

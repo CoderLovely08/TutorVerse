@@ -576,3 +576,17 @@ export const deleteStudentSkill = async (id) => {
     };
   }
 };
+
+
+export const getVerifiedStudentCountByFaculty = async (id) => {
+  try {
+    const query = {
+      text: `SELECT COUNT(*) FROM TutorInfo WHERE is_verified AND faculty_id = $1`,
+      values: [id]
+    }
+    const { rows } = await pool.query(query);
+    return rows[0].count;
+  } catch (error) {
+    return 0;
+  }
+}

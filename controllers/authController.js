@@ -72,6 +72,7 @@ export const handleFacultyLogin = async (req, res) => {
       });
 
     const result = await validateFacultyLoginDetails(email, password);
+    console.log(result);
 
     const statusCode = result.success ? 200 : 401;
 
@@ -87,6 +88,8 @@ export const handleFacultyLogin = async (req, res) => {
       const userObject = {
         userId: result.data[0].faculty_id,
         username: result.data[0].faculty_full_name,
+        courseId: result.data[0].course_id,
+        branchId: result.data[0].branch_id,
         role: "faculty",
       };
       token = await genereateToken(userObject);

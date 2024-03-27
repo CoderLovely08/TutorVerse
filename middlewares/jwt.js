@@ -4,11 +4,7 @@ import "dotenv/config";
 const TOKEN_SECRET = process.env.TOKEN_SECRET;
 export const genereateToken = async (userObject) => {
   try {
-    const payload = {
-      userId: userObject.userId, // Example: user ID
-      username: userObject.username, // Example: username
-      role: userObject.role,
-    };
+    const payload = { ...userObject };
     // Generate a token using jwt.sign()
     const token = jwt.sign(payload, TOKEN_SECRET, { expiresIn: "1h" }); // Change 'your_secret_key' to your actual secret key
 
