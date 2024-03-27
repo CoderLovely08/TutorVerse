@@ -22,7 +22,7 @@ export const handleViewFacultyRegister = async (req, res) => {
       getAllBranches(),
     ]);
     res.render("faculty/register", {
-      dropdownOptions: { facultyData: result, courseData, branchData },
+      dropdownOptions: { courseData, branchData },
     });
   } catch (error) {
     res.render("error");
@@ -59,7 +59,7 @@ export const handleViewFacultyVerifyPage = async (req, res) => {
   try {
     const { courseId, branchId } = req.user;
     const students = await getAllUnverifiedStudents(courseId, branchId);
-    console.log(students);
+
     res.render("faculty/verify", {
       studentsData: students.data,
     });

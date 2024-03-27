@@ -330,7 +330,7 @@ export const handleApplyTutor = async (req, res) => {
       });
 
     const result = await applyForTutor(userId, skillId, title, description);
-    console.log(result);
+    
     res.status(result.success ? 200 : 401).json(result);
   } catch (error) {
     res.status(500).json({
