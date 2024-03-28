@@ -72,7 +72,6 @@ export const handleFacultyLogin = async (req, res) => {
       });
 
     const result = await validateFacultyLoginDetails(email, password);
-    console.log(result);
 
     const statusCode = result.success ? 200 : 401;
 

@@ -366,10 +366,9 @@ export const markStudentVerifiedById = async (
             `,
       values: [tutorId, facultyId, isVerified == "true" ? true : true, remark],
     };
-    console.log(query);
 
     const { rows, rowCount } = await pool.query(query);
-    console.log(rows);
+
     return {
       success: rowCount == 1,
       message:
