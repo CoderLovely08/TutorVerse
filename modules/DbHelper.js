@@ -294,6 +294,14 @@ export const getSkillBySkillId = async (id) => {
   }
 };
 
+/**
+ * Asynchronously retrieves information about all faculty members. This function
+ * joins the FacultyInfo, CourseInfo, and BranchInfo tables to provide comprehensive details
+ * about each faculty member, including their associated course and branch.
+ *
+ * @returns {Promise<Object>} An object containing the success status, a message indicating the result of the operation,
+ *                            and an array of data with all faculty members' information.
+ */
 export const getAllFaculty = async () => {
   try {
     const query = {
@@ -321,6 +329,15 @@ export const getAllFaculty = async () => {
   }
 };
 
+/**
+ * Asynchronously retrieves detailed information about a faculty member by their ID. The function
+ * joins the FacultyInfo, CourseInfo, and BranchInfo tables to gather comprehensive details about
+ * the faculty member, including their associated course and branch.
+ *
+ * @param {number} id - The unique identifier of the faculty member whose information is to be retrieved.
+ * @returns {Promise<Object>} An object containing the success status, a message indicating whether
+ *                            the faculty information was successfully fetched, and the data of the faculty member.
+ */
 export const getFacultyById = async (id) => {
   try {
     const query = {
@@ -349,6 +366,18 @@ export const getFacultyById = async (id) => {
   }
 };
 
+/**
+ * Asynchronously updates the verification status of a student (tutor) by their ID. This function
+ * marks the student as verified or rejected based on the input parameters. It updates the TutorInfo
+ * table, setting the `is_verified` or `is_rejected` flag and recording the faculty's remarks.
+ *
+ * @param {number} tutorId - The unique identifier of the tutor whose verification status is being updated.
+ * @param {number} facultyId - The unique identifier of the faculty who is verifying or rejecting the tutor.
+ * @param {boolean|string} isVerified - A boolean or string value indicating whether the tutor is being verified (true) or rejected (false).
+ * @param {string} remark - Remarks provided by the faculty about the verification or rejection.
+ * @returns {Promise<Object>} An object containing the success status, a message describing the outcome of the operation,
+ *                            and any data returned from the query.
+ */
 export const markStudentVerifiedById = async (
   tutorId,
   facultyId,
@@ -389,6 +418,13 @@ export const markStudentVerifiedById = async (
   }
 };
 
+/**
+ * Asynchronously retrieves all tutors based on verification status and optional skill.
+ * 
+ * @param {boolean} status - The verification status to filter tutors (true or false).
+ * @param {number} [skillId] - Optional skill ID to further filter tutors by their skills.
+ * @returns {Promise<Object>} An object containing the success status, message, and data of tutors.
+ */
 export const getAllTutors = async (status, skillId) => {
   try {
     let query = {
@@ -447,6 +483,15 @@ export const getAllTutors = async (status, skillId) => {
   }
 };
 
+/**
+ * Asynchronously retrieves details of a specific tutor based on their associated student ID.
+ * This function queries multiple related tables to compile comprehensive details about the tutor,
+ * including their personal info, skills, academic background, and verification status.
+ *
+ * @param {number} id - The unique identifier for the tutor, typically associated with their student ID.
+ * @returns {Promise<Object>} An object containing the success status, message, and the tutor's details,
+ *                            or an error message if the operation fails.
+ */
 export const getTutorDetailsById = async (id) => {
   try {
     const query = {
@@ -504,6 +549,18 @@ export const getTutorDetailsById = async (id) => {
   }
 };
 
+/**
+ * Asynchronously applies for a tutor position for a student with a specific skill. It first checks if
+ * the student already has an application for the same skill that is verified and not rejected.
+ * If not, it proceeds to insert or update the tutor application in the TutorInfo table.
+ *
+ * @param {number} studentId - The ID of the student applying for the tutor position. Default is 1.
+ * @param {number} skillId - The ID of the skill for which the student is applying to be a tutor.
+ * @param {string} title - The title or subject the student wants to tutor in.
+ * @param {string} description - A description of the student's skills and experience in the subject.
+ * @returns {Promise<Object>} An object containing the success status, a message indicating the result
+ *                            of the application, and an empty data array.
+ */
 export const applyForTutor = async (
   studentId = 1,
   skillId,
@@ -564,6 +621,16 @@ export const applyForTutor = async (
   }
 };
 
+/**
+ * Asynchronously adds a new skill to a student's profile. It first checks if the skill already exists
+ * for the student to avoid duplicates. If the skill doesn't exist, it adds the new skill to the student's
+ * profile in the StudentSkillsInfo table.
+ *
+ * @param {number} studentId - The ID of the student to whom the skill will be added.
+ * @param {number} skillId - The ID of the skill to be added to the student's profile.
+ * @returns {Promise<Object>} An object containing the success status and a message indicating whether
+ *                            the skill was successfully added or if it already exists.
+ */
 export const addStudentSkill = async (studentId, skillId) => {
   try {
     const checkQuery = {
@@ -603,6 +670,15 @@ export const addStudentSkill = async (studentId, skillId) => {
   }
 };
 
+/**
+ * Asynchronously retrieves all skills associated with a given student ID. 
+ * It fetches the skill details from the StudentSkillsInfo table and joins with the SkillsInfo table
+ * to get the skill names.
+ *
+ * @param {number} id - The ID of the student whose skills are to be fetched.
+ * @returns {Promise<Array>} An array of skill objects associated with the student,
+ *                           or an empty array if an error occurs or no skills are found.
+ */
 export const getAllSkillsByStudentId = async (id) => {
   try {
     const qurey = {
@@ -623,6 +699,15 @@ export const getAllSkillsByStudentId = async (id) => {
   }
 };
 
+/**
+ * Asynchronously deletes a skill from a student's profile based on the student_skill_id.
+ * This function performs a deletion in the StudentSkillsInfo table.
+ *
+ * @param {number} id - The unique identifier for the student's skill (student_skill_id)
+ *                      that needs to be deleted.
+ * @returns {Promise<Object>} An object containing the success status and a message indicating whether
+ *                            the skill was successfully deleted or if the mapping was not found.
+ */
 export const deleteStudentSkill = async (id) => {
   try {
     const query = {
@@ -645,6 +730,15 @@ export const deleteStudentSkill = async (id) => {
   }
 };
 
+/**
+ * Asynchronously counts the number of verified students (tutors) associated with a specific faculty.
+ * This function queries the TutorInfo table to count students who have been verified and belong to
+ * a given faculty.
+ *
+ * @param {number} id - The unique identifier of the faculty to count verified students for.
+ * @returns {Promise<number>} The count of verified students associated with the specified faculty,
+ *                            or 0 if an error occurs during the query execution.
+ */
 export const getVerifiedStudentCountByFaculty = async (id) => {
   try {
     const query = {
@@ -658,6 +752,15 @@ export const getVerifiedStudentCountByFaculty = async (id) => {
   }
 };
 
+/**
+ * Asynchronously retrieves all skills for tutors who are verified. This function
+ * joins the StudentSkillsInfo, TutorInfo, and SkillsInfo tables to get a list of
+ * skills possessed by verified tutors, showing the diversity of skills beyond their
+ * primary tutoring subjects.
+ *
+ * @returns {Promise<Array>} An array of objects where each object contains the tutor_id
+ *                           and the skill_name they possess, or an empty array if an error occurs.
+ */
 export const getAllTutorOtherSkills = async () => {
   try {
     const query = {
