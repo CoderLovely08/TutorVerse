@@ -113,6 +113,16 @@
                 <strong>Description:</strong>
                 <%= tutors[i].skill_description %>
               </p>
+              <div class="flex gap-2 flex-wrap">
+                <span class="font-bold">Other Skills:</span>
+                <% for( let j = 0; j < tutorOtherSkills.length; j++ ) { %>
+                  <% if (parseInt(tutorOtherSkills[j]?.tutor_id) === parseInt(tutors[i]?.tutor_id) ) { %> 
+                    <span class="text-sm px-2 py-1 rounded-md shadow-md bg-white border border-green-500">
+                      <%= tutorOtherSkills[j].skill_name %>
+                    </span>
+                  <% } %>
+                <% } %>
+              </div>
             </div>
           </div>
         </div>

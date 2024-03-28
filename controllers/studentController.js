@@ -6,6 +6,7 @@ import {
   getAllSemesters,
   getAllSkills,
   getAllSkillsByStudentId,
+  getAllTutorOtherSkills,
   getAllTutors,
   getStudentDetailsById,
   getTutorDetailsById,
@@ -118,12 +119,17 @@ export const handleViewTutorHome = async (req, res) => {
 export const handleViewSearch = async (req, res) => {
   try {
     const { skill } = req.query;
-    const skills = await getAllSkills();
-    const tutors = await getAllTutors(true, skill);
-    ;
+
+    const [skills, tutors, tutorOtherSkills] = await Promise.all([
+      getAllSkills(),
+      getAllTutors(true, skill),
+      getAllTutorOtherSkills(),
+    ]);
+
     res.render("student/search", {
       skills: skills.data,
       tutors: tutors.data,
+      tutorOtherSkills,
     });
   } catch (error) {
     console.log(error);

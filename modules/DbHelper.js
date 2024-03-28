@@ -398,6 +398,7 @@ export const getAllTutors = async (status, skillId) => {
         si.student_id,
         si.student_full_name,
         ski.skill_name,
+        ti.tutor_title,
         ti.skill_description,
         ti.is_verified,
         ti.tutor_rating,
@@ -427,7 +428,7 @@ export const getAllTutors = async (status, skillId) => {
     };
 
     if (skillId) {
-      query.text +=` AND ti.skill_id = $2`;
+      query.text += ` AND ti.skill_id = $2`;
       query.values.push(skillId);
     }
 
@@ -654,5 +655,25 @@ export const getVerifiedStudentCountByFaculty = async (id) => {
     return rows[0].count;
   } catch (error) {
     return 0;
+  }
+};
+
+export const getAllTutorOtherSkills = async () => {
+  try {
+    const query = {
+      text: `
+      SELECT ti.tutor_id, si.skill_name
+      FROM StudentSkillsInfo ssi 
+      JOIN TutorInfo ti
+      	ON ti.student_id = ssi.student_id 
+      JOIN Skillsinfo si
+      	ON si.skill_id = ssi.skill_id
+      WHERE ti.is_verified
+      `,
+    };
+    const { rows } = await pool.query(query);
+    return rows;
+  } catch (error) {
+    return [];
   }
 };
