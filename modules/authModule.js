@@ -133,7 +133,7 @@ export const registerStudent = async (fullName, email, password, gender, courseI
                 student_dob,
                 student_university_id
                 ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-            values: [fullName, email, hashedPassword, courseId, branchId, semesterId, phone, dob]
+            values: [fullName, email, hashedPassword, gender, courseId, branchId, semesterId, phone, dob, enrollment]
         }
 
         const { rows, rowCount } = await pool.query(query);
