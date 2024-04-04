@@ -3,6 +3,7 @@ import { genereateToken } from "../middlewares/jwt.js";
 import {
   registerFaculty,
   registerStudent,
+  updateUserPassword,
   validateEmailCredential,
   validateFacultyLoginDetails,
   validateStudentLoginDetails,
@@ -254,7 +255,7 @@ export const handleStudentLogin = async (req, res) => {
           token: token.token,
         };
         res.cookie("token", token?.token, {
-          maxAge: 1200000,
+          maxAge: 2 * 60 * 1000,
           httpOnly: true,
           secure: process.env.NODE_ENV == "prod",
         });
@@ -308,10 +309,11 @@ export const handlePostPasswordRecovery = async (req, res) => {
         userId:
           userType == "student" ? dataObject.student_id : dataObject.faculty_id,
         userEmail: userType === "student" ? "student_email" : "faculty_email",
+        userType: userType,
       };
 
       let responseObject = {
-        succes: dbResult.success,
+        success: dbResult.success,
         message: dbResult.message,
       };
 
@@ -323,7 +325,7 @@ export const handlePostPasswordRecovery = async (req, res) => {
           token: token.token,
         };
         res.cookie("passToken", token?.token, {
-          maxAge: 15 * 1000,
+          maxAge: 60 * 1000,
           httpOnly: true,
           secure: process.env.NODE_ENV == "prod",
         });
@@ -332,7 +334,7 @@ export const handlePostPasswordRecovery = async (req, res) => {
     }
 
     return res.json({
-      succes: dbResult.success,
+      success: dbResult.success,
       message: dbResult.message,
     });
   } catch (error) {
@@ -346,3 +348,40 @@ export const handlePostPasswordRecovery = async (req, res) => {
 };
 
 
+export const handleViewPasswordChange = async (req, res) => {
+  try {
+    res.render("utility/changePasword");
+  } catch (error) {
+    res.render("404");
+  }
+};
+
+
+export const handlePostPasswordChange = async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    // Validate password
+    if (!password || !validator.isStrongPassword(password))
+      return res.status(200).json({
+        success: false,
+        message: "Please use a strong alphanumeric password",
+      });
+
+    const { userType, userId } = req.resetRequestUser;
+
+    const dbResult = await updateUserPassword(password, userType, userId);
+
+    return res.json({
+      success: dbResult.success,
+      message: dbResult.message,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};

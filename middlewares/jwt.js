@@ -51,6 +51,32 @@ export const verifyTokenMiddleware = (requiredRole) => (req, res, next) => {
   }
 };
 
+export const verifyPassTokenMiddleware = (req, res, next) => {
+  // Get the token from the request headers or query parameters or cookies
+  const token =
+    req.headers.authorization || req.query.passToken || req.cookies.passToken;
+
+  if (!token) {
+    return res.status(401).render("403");
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, TOKEN_SECRET);
+
+    // Set req.user to the decoded payload
+    req.resetRequestUser = decoded;
+
+    // Call next to move to the next middleware or route handler
+    next();
+  } catch (error) {
+    console.error("Error verifying pass token:", error);
+    return res
+      .status(401)
+      .json({ success: false, message: "Pass Token verification failed" });
+  }
+};
+
 export const isLoggedIn = async (req, res, next) => {
   // Get the token from the request headers, query parameters, or cookies
   const token =

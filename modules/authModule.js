@@ -270,3 +270,35 @@ export const validateEmailCredential = async (type, email) => {
     };
   }
 };
+
+export const updateUserPassword = async (password, type, userId) => {
+  try {
+    const tableName = type === "student" ? "StudentInfo" : "FacultyInfo";
+    const idCol = type === "student" ? "student_id" : "faculty_id";
+    const passwordCol =
+      type === "student" ? "student_password" : "faculty_password";
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    const query = {
+      text: `UPDATE ${tableName} SET ${passwordCol} = $1 WHERE ${idCol} = $2`,
+      values: [hashedPassword, userId],
+    };
+
+    const { rows, rowCount } = await pool.query(query);
+
+    return {
+      success: rowCount === 1,
+      message:
+        rowCount === 1
+          ? "Password changed successfully, kindly login to your account!"
+          : "Unable to update your password at the moment",
+      data: rows,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};

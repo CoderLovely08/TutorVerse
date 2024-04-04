@@ -34,7 +34,7 @@
           minlength="6"
         />
       </div>
-      <div class="mb-4">
+      <div class="mb-4 flex flex-row-reverse justify-end items-center gap-2">
         <label
           for="show-password"
           class="block text-gray-700 font-semibold mb-2"
@@ -85,9 +85,9 @@
 
       $.ajax({
         type: "POST",
-        url: "/api/reset-password",
+        url: "/auth/reset-password",
         data: {
-          newPassword: newPassword,
+          password: newPassword,
         },
         beforeSend: function () {
           $("#reset-password-btn")
@@ -98,6 +98,7 @@
         },
         success: function (response) {
           alert(response.message);
+          if (response.success) window.location.href = "/";
           // Optionally, redirect or perform other actions based on the response
         },
         complete: function () {
@@ -109,7 +110,7 @@
         },
         error: function (xhr, status, error) {
           console.log(error);
-          alert("An error occurred. Please try again later.");
+          alert("Password reset session expired, try again later!");
         },
       });
     });

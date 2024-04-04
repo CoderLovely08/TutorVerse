@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { handleFacultyLogin, handleFacultyRegister, handlePostPasswordRecovery, handleStudentLogin, handleStudentRegistration, handleUserLogout, handleViewPasswordRecovery } from "../controllers/authController.js";
+import { handleFacultyLogin, handleFacultyRegister, handlePostPasswordChange, handlePostPasswordRecovery, handleStudentLogin, handleStudentRegistration, handleUserLogout, handleViewPasswordChange, handleViewPasswordRecovery } from "../controllers/authController.js";
+import { verifyPassTokenMiddleware } from "../middlewares/jwt.js";
 const router = Router();
 
 router.route('/faculty/register').post(handleFacultyRegister)
@@ -11,8 +12,8 @@ router.route('/student/login').post(handleStudentLogin)
 router.route('/password').get(handleViewPasswordRecovery)
     .post(handlePostPasswordRecovery)
 
-router.route('/reset-password').get(handleViewPasswordChange)
-    .post(handlePostPasswordChange)
+router.route('/reset-password').get(verifyPassTokenMiddleware, handleViewPasswordChange)
+    .post(verifyPassTokenMiddleware, handlePostPasswordChange)
 
 
 router.route('/logout').post(handleUserLogout)
