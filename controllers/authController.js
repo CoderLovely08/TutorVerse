@@ -3,6 +3,7 @@ import { genereateToken } from "../middlewares/jwt.js";
 import {
   registerFaculty,
   registerStudent,
+  validateEmailCredential,
   validateFacultyLoginDetails,
   validateStudentLoginDetails,
 } from "../modules/authModule.js";
@@ -287,3 +288,61 @@ export const handleUserLogout = async (req, res) => {
     });
   }
 };
+
+export const handleViewPasswordRecovery = async (req, res) => {
+  try {
+    res.render("utility/forgotPassword");
+  } catch (error) {
+    res.render("404");
+  }
+};
+
+export const handlePostPasswordRecovery = async (req, res) => {
+  try {
+    const { email, userType } = req.body;
+    const dbResult = await validateEmailCredential(userType, email);
+
+    if (dbResult.success) {
+      const dataObject = { ...dbResult.data[0] };
+      const userData = {
+        userId:
+          userType == "student" ? dataObject.student_id : dataObject.faculty_id,
+        userEmail: userType === "student" ? "student_email" : "faculty_email",
+      };
+
+      let responseObject = {
+        succes: dbResult.success,
+        message: dbResult.message,
+      };
+
+      const token = await genereateToken(userData);
+      // If token generation is successful add token to response object
+      if (token.succes) {
+        responseObject = {
+          ...responseObject,
+          token: token.token,
+        };
+        res.cookie("passToken", token?.token, {
+          maxAge: 15 * 1000,
+          httpOnly: true,
+          secure: process.env.NODE_ENV == "prod",
+        });
+        return res.json(responseObject);
+      }
+    }
+
+    return res.json({
+      succes: dbResult.success,
+      message: dbResult.message,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      data: [],
+    });
+  }
+};
+
+

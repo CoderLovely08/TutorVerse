@@ -1,0 +1,119 @@
+<%- include('../partials/header') %>
+
+<main class="flex justify-center items-center w-full h-svh">
+  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-6">Reset Password</h2>
+    <form id="reset-password-form" action="" method="POST">
+      <div class="mb-4">
+        <label for="new-password" class="block text-gray-700 font-semibold mb-2"
+          >New Password</label
+        >
+        <input
+          type="password"
+          id="new-password"
+          name="newPassword"
+          class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-black"
+          placeholder="Enter your new password"
+          required
+          minlength="6"
+        />
+      </div>
+      <div class="mb-4">
+        <label
+          for="confirm-password"
+          class="block text-gray-700 font-semibold mb-2"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          id="confirm-password"
+          name="confirmPassword"
+          class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-black"
+          placeholder="Confirm your new password"
+          required
+          minlength="6"
+        />
+      </div>
+      <div class="mb-4">
+        <label
+          for="show-password"
+          class="block text-gray-700 font-semibold mb-2"
+          >Show Password</label
+        >
+        <input
+          id="show-password"
+          type="checkbox"
+          class="form-checkbox text-black"
+        />
+      </div>
+      <button
+        id="reset-password-btn"
+        type="submit"
+        class="bg-black text-white font-semibold py-2 px-4 rounded-md w-full hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+      >
+        Reset Password
+      </button>
+    </form>
+  </div>
+</main>
+
+<script>
+  $(document).ready(function () {
+    // Toggle password visibility
+    $("#show-password").change(function () {
+      var isChecked = $(this).is(":checked");
+      if (isChecked) {
+        $("#new-password").attr("type", "text");
+        $("#confirm-password").attr("type", "text");
+      } else {
+        $("#new-password").attr("type", "password");
+        $("#confirm-password").attr("type", "password");
+      }
+    });
+
+    // Handle form submission
+    $("#reset-password-form").submit(function (event) {
+      event.preventDefault();
+
+      var newPassword = $("#new-password").val().trim();
+      var confirmPassword = $("#confirm-password").val().trim();
+
+      if (newPassword !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/api/reset-password",
+        data: {
+          newPassword: newPassword,
+        },
+        beforeSend: function () {
+          $("#reset-password-btn")
+            .text("Loading...")
+            .removeClass("bg-black")
+            .addClass("bg-gray-600")
+            .prop("disabled", true);
+        },
+        success: function (response) {
+          alert(response.message);
+          // Optionally, redirect or perform other actions based on the response
+        },
+        complete: function () {
+          $("#reset-password-btn")
+            .text("Reset Password")
+            .removeClass("bg-gray-600")
+            .addClass("bg-black")
+            .prop("disabled", false);
+        },
+        error: function (xhr, status, error) {
+          console.log(error);
+          alert("An error occurred. Please try again later.");
+        },
+      });
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>

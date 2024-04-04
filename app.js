@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import multer from "multer";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 import "dotenv/config";
 
 // Creating app instance
@@ -15,8 +16,17 @@ app.set("view engine", "ejs");
 // Setup middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static('public'))
+app.use(express.static("public"));
 
+// Configure the session middleware
+app.use(
+  session({
+    secret: process.env.APP_SECRET, // Change this to a long, random string
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: process.env.NODE_ENV }, // Set secure: true if using HTTPS
+  })
+);
 
 // app.use(cors());
 app.use(bodyParser.json());
