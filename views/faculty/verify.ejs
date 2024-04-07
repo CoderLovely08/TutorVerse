@@ -83,7 +83,13 @@
                                 data-action="accept" data-tutor-id="<%= studentsData[i].tutor_id %>">Accept</button>
                         </div>
                     </div>
-                    <% } %>
+            <% } %>
+                
+                <% if(studentsData.length <=0 ) { %>
+                    <div class="bg-white rounded-lg shadow-lg w-1/2 max-md:w-full h-1/2 p-4">
+                        <h1 class="text-2xl max-md:text-xl max-sm:text-lg">No pending verificaiton applications from students</h1>
+                    </div>
+                <% } %>
             </div>
         </section>
     </main>

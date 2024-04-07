@@ -1,7 +1,10 @@
 import {
   getAllBranches,
   getAllCourses,
+  getAllSkills,
   getAllStudents,
+  getAllTutorOtherSkills,
+  getAllTutors,
   getAllUnverifiedStudents,
   getFacultyById,
   getVerifiedStudentCountByFaculty,
@@ -68,3 +71,23 @@ export const handleViewFacultyVerifyPage = async (req, res) => {
   }
 };
 
+export const handleViewVerifedStudents = async (req, res) => {
+  try {
+    const { skill } = req.query;
+
+    const [skills, tutors, tutorOtherSkills] = await Promise.all([
+      getAllSkills(),
+      getAllTutors(true, skill),
+      getAllTutorOtherSkills(),
+    ]);
+
+    res.render("faculty/verified", {
+      skills: skills.data,
+      tutors: tutors.data,
+      tutorOtherSkills,
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("404");
+  }
+};

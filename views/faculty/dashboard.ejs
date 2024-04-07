@@ -19,6 +19,7 @@
             <th>Branch</th>
             <th>Semester</th>
             <th>Phone</th>
+            <th>Tutor Status</th>
           </tr>
         </thead>
         <tbody>
@@ -31,8 +32,11 @@
               <td><%= students[i].semester_name %></td>
               <td>
                 <%= students[i].student_phone_number %>
-                <!-- <button class="px-2 py1 bg-green-500 text-white font-bold shadow rounded">View</button> -->
               </td>
+              <td class="<%= students[i].tutor_id ? 'bg-green-100' : 'bg-red-100' %> text-center px-4 py-2">
+                <%= students[i].tutor_id ? 'Tutor ': 'Not a Tutor' %>
+              </td>
+
             </tr>
           <% } %>
         </tbody>

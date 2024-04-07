@@ -5,6 +5,7 @@ import {
   handleViewFacultyLogin,
   handleViewFacultyRegister,
   handleViewFacultyVerifyPage,
+  handleViewVerifedStudents,
 } from "../controllers/facultyController.js";
 import { isLoggedIn, verifyTokenMiddleware } from "../middlewares/jwt.js";
 
@@ -21,6 +22,9 @@ router
 router
   .route("/verify")
   .get(verifyTokenMiddleware(["faculty"]), handleViewFacultyVerifyPage);
+
+router.route("/verified")
+.get(verifyTokenMiddleware(["faculty"]), handleViewVerifedStudents)
 
 router.route("/login").get(isLoggedIn, handleViewFacultyLogin);
 

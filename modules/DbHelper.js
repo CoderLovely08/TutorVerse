@@ -74,6 +74,8 @@ export const getAllStudents = async (courseId = 0, branchId = 0) => {
                 ON bi.branch_id = si.branch_id
             JOIN SemesterInfo semi
                 ON semi.semester_id = si.semester_id
+            LEFT JOIN TutorInfo ti
+                ON ti.student_id = si.student_id
             WHERE 1 = 1 
             `,
     };
@@ -425,7 +427,7 @@ export const markStudentVerifiedById = async (
  * @param {number} [skillId] - Optional skill ID to further filter tutors by their skills.
  * @returns {Promise<Object>} An object containing the success status, message, and data of tutors.
  */
-export const getAllTutors = async (status, skillId) => {
+export const getAllTutors = async (status = true, skillId) => {
   try {
     let query = {
       text: `
@@ -444,7 +446,8 @@ export const getAllTutors = async (status, skillId) => {
         ci.course_name,
         bi.branch_name,
         semi.semester_name,
-        fi.faculty_full_name
+        fi.faculty_full_name,
+        ti.created_at
       FROM TutorInfo ti
       JOIN StudentInfo si
           ON si.student_id = ti.student_id
